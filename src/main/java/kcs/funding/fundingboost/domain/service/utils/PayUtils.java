@@ -7,6 +7,9 @@ import kcs.funding.fundingboost.domain.exception.CommonException;
 
 public class PayUtils {
     public static void deductPointsIfPossible(Member member, int points) {
+        if (points == 0) {
+            return;
+        }
         if (member.getPoint() - points >= 0) {
             member.minusPoint(points);
         } else {

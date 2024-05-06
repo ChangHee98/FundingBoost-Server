@@ -1,7 +1,7 @@
 package kcs.funding.fundingboost.domain.dto.response.friendFundingDetail;
 
 
-import java.time.LocalDateTime;
+import java.time.format.DateTimeFormatter;
 import java.util.List;
 import kcs.funding.fundingboost.domain.entity.Funding;
 import lombok.Builder;
@@ -9,8 +9,8 @@ import lombok.Builder;
 @Builder
 public record FriendFundingDetailDto(List<FriendFundingItemDto> friendFundingItemList,
                                      List<ContributorDto> contributorList,
-                                     String friendName, String friendProfile,
-                                     LocalDateTime deadline, int contributedPercent,
+                                     String friendName, String friendProfileImgUrl,
+                                     String deadline, int contributedPercent,
                                      String fundingTag, String fundingMessage) {
 
 
@@ -21,11 +21,11 @@ public record FriendFundingDetailDto(List<FriendFundingItemDto> friendFundingIte
         return FriendFundingDetailDto.builder()
                 .friendFundingItemList(friendFundingItemList)
                 .friendName(funding.getMember().getNickName())
+                .friendProfileImgUrl(funding.getMember().getProfileImgUrl())
                 .fundingTag(funding.getTag().getDisplayName())
                 .fundingMessage(funding.getMessage())
-                .friendProfile(funding.getMember().getProfileImgUrl())
                 .contributorList(contributorList)
-                .deadline(funding.getDeadline())
+                .deadline(funding.getDeadline().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
                 .contributedPercent(contributedPercent)
                 .build();
     }

@@ -44,10 +44,9 @@ public class Order extends BaseTimeEntity {
     private Delivery delivery;
 
 
-    public static Order createOrder(int totalPrice, Member member,
-                                    Delivery delivery) {
+    public static Order createOrder(Member member, Delivery delivery) {
         Order order = new Order();
-        order.totalPrice = totalPrice;
+        order.totalPrice = 0;
         order.member = member;
         order.delivery = delivery;
         return order;

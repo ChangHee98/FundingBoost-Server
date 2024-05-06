@@ -5,14 +5,14 @@ import lombok.Builder;
 
 @Builder
 public record MyPageMemberDto(
-        String nickname,
+        String nickName,
         String email,
         String profileImgUrl,
         int point
 ) {
     public static MyPageMemberDto fromEntity(Member member) {
         return MyPageMemberDto.builder()
-                .nickname(member.getNickName())
+                .nickName(member.getNickName())
                 .email(member.getEmail())
                 .profileImgUrl(member.getProfileImgUrl())
                 .point(member.getPoint())

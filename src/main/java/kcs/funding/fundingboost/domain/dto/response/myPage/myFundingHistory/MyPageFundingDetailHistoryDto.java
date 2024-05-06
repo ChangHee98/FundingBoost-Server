@@ -12,10 +12,10 @@ public record MyPageFundingDetailHistoryDto(
         String itemImageUrl,
         String optionName,
         boolean status,
-        Long contributorCount,
+        int contributorCount,
         String tag
 ) {
-    public static MyPageFundingDetailHistoryDto fromEntity(Funding funding, Long contributor) {
+    public static MyPageFundingDetailHistoryDto fromEntity(Funding funding, int contributor) {
         return MyPageFundingDetailHistoryDto.builder()
                 .fundingId(funding.getFundingId())
                 .createdDate(funding.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))

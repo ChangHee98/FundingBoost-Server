@@ -49,7 +49,7 @@ public class GiftHubController {
      * 상품 수량 변경
      */
     @PatchMapping("/quantity/{gifthubItemId}")
-    public ResponseDto<CommonSuccessDto> patchGifthubItem(@PathVariable(name = "gifthubItemId") Long gifthubItemId,
+    public ResponseDto<CommonSuccessDto> patchGiftHubItem(@PathVariable(name = "gifthubItemId") Long gifthubItemId,
                                                           @RequestBody ItemQuantityDto itemQuantity) {
         return ResponseDto.ok(giftHubItemService.updateItem(gifthubItemId, itemQuantity));
     }

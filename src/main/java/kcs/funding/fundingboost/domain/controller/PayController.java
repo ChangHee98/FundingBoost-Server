@@ -1,14 +1,13 @@
 package kcs.funding.fundingboost.domain.controller;
 
-import java.util.List;
 import kcs.funding.fundingboost.domain.dto.common.CommonSuccessDto;
 import kcs.funding.fundingboost.domain.dto.global.ResponseDto;
 import kcs.funding.fundingboost.domain.dto.request.pay.friendFundingPay.FriendPayProcessDto;
+import kcs.funding.fundingboost.domain.dto.request.pay.myPay.ItemPayNowDto;
 import kcs.funding.fundingboost.domain.dto.request.pay.myPay.MyPayDto;
 import kcs.funding.fundingboost.domain.dto.request.pay.myPay.PayRemainDto;
 import kcs.funding.fundingboost.domain.dto.response.pay.friendFundingPay.FriendFundingPayingDto;
 import kcs.funding.fundingboost.domain.dto.response.pay.myPay.MyFundingPayViewDto;
-import kcs.funding.fundingboost.domain.dto.response.pay.myPay.MyNowOrderPayViewDto;
 import kcs.funding.fundingboost.domain.dto.response.pay.myPay.MyOrderPayViewDto;
 import kcs.funding.fundingboost.domain.service.pay.FriendPayService;
 import kcs.funding.fundingboost.domain.service.pay.MyPayService;
@@ -30,33 +29,22 @@ public class PayController {
     private final FriendPayService friendPayService;
 
     /**
-     * 마이 페이 주문 페이지 조회
+     * 마이 페이 주문 페이지 조회 & 즉시 결제시 페이지 조회
      */
     @GetMapping("/view/order")
     public ResponseDto<MyOrderPayViewDto> myOrderPayView(
-            @RequestParam(name = "itemId") List<Long> itemIds,
-            @RequestParam(name = "memberId") Long memberId) {
-        return ResponseDto.ok(myPayService.myOrderPayView(itemIds, memberId));
+            @RequestParam(name = "memberId") Long memberId
+    ) {
+        return ResponseDto.ok(myPayService.myOrderPayView(memberId));
     }
 
     /**
-     * 즉시 결제시 페이지 조회
-     */
-    @GetMapping("/view/order/now")
-    public ResponseDto<MyNowOrderPayViewDto> MyOrderNowPayView(
-            @RequestParam(name = "itemId") Long itemDto,
-            @RequestParam(name = "memberId") Long memberId) {
-        return ResponseDto.ok(myPayService.MyOrderNowPayView(itemDto, memberId));
-    }
-
-    /**
-     * 마이 페이 펀딩 페이지 조회
+     * 마이 페이 펀딩 페이지 조회 펀딩 종료된 펀딩 아이템에 대해서 배송지 입력하기, 전여 금액 결제하기
      */
     @GetMapping("/view/funding/{fundingItemId}")
     public ResponseDto<MyFundingPayViewDto> myFundingPayView(
             @PathVariable(name = "fundingItemId") Long fundingItemId,
             @RequestParam(name = "memberId") Long memberId) {
-
         return ResponseDto.ok(myPayService.myFundingPayView(fundingItemId, memberId));
     }
 
@@ -67,6 +55,15 @@ public class PayController {
     public ResponseDto<CommonSuccessDto> payMyOrder(@RequestBody MyPayDto paymentDto,
                                                     @RequestParam("memberId") Long memberId) {
         return ResponseDto.ok(myPayService.payMyItem(paymentDto, memberId));
+    }
+
+    /**
+     * 상품 즉시 구매하기
+     */
+    @PostMapping("/order/now")
+    public ResponseDto<CommonSuccessDto> payMyOrderNow(@RequestBody ItemPayNowDto itemPayNowDto,
+                                                       @RequestParam("memberId") Long memberId) {
+        return ResponseDto.ok(myPayService.payMyItemNow(itemPayNowDto, memberId));
     }
 
     /**

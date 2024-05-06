@@ -15,11 +15,12 @@ public class ContributorRepositoryImpl implements ContributorRepositoryCustom {
     private final JPAQueryFactory queryFactory;
 
     @Override
-    public Long countContributorsForFunding(Long fundingId) {
-        return queryFactory
+    public int countContributorsForFunding(Long fundingId) {
+        Long count = queryFactory
                 .select(contributor.count())
                 .from(contributor)
                 .where(contributor.funding.fundingId.eq(fundingId))
                 .fetchOne();
+        return count != null ? count.intValue() : 0;
     }
 }

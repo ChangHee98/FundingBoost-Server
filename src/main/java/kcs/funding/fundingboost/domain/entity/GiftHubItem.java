@@ -27,7 +27,7 @@ public class GiftHubItem extends BaseTimeEntity {
     @Id
     @GeneratedValue(strategy = IDENTITY)
     @Column(name = "giftHub_item_id")
-    private Long giftHunItemId;
+    private Long giftHubItemId;
 
     @ColumnDefault("1")
     @Column(name = "quantity")

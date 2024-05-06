@@ -47,9 +47,9 @@ public class InitH2DB {
         List<Item> items = initService.initBeauty();
         List<Delivery> deliveries = initService.initDelivery(members);
         initService.initOrders(members, items, deliveries);
-        initService.initFunding(members, items);
+        List<Funding> fundings = initService.initFunding(members, items);
         initService.initRelationships(members);
-        initService.initContributor(members, items);
+        initService.initContributor(members, fundings);
         initService.initBookmark(members, items);
     }
 
@@ -61,20 +61,54 @@ public class InitH2DB {
 
         private final EntityManager em;
 
+        private Item item1;
+        private Item item2;
+        private Item item3;
+        private Item item4;
+        private Item item5;
+
+        private GiftHubItem giftHubItem1;
+        private GiftHubItem giftHubItem2;
+
+        private Member member1;
+        private Member member2;
+        private Member member3;
+        private Member member4;
+        private Member member5;
+        private Member member6;
+        private Delivery delivery1;
+        private Delivery delivery2;
+
+        private Funding funding1;
+        private Funding funding2;
+        private Funding funding3;
+        private Funding funding4;
+        private FundingItem fundingItem1;
+        private FundingItem fundingItem2;
+        private FundingItem fundingItem3;
+        private FundingItem fundingItem4;
+
+        private Bookmark bookmark1;
+        private Bookmark bookmark2;
+        private Bookmark bookmark3;
+        private Bookmark bookmark4;
+        private Bookmark bookmark5;
+
+
         public void initOrders(List<Member> members, List<Item> items, List<Delivery> deliveries) {
-            Item item1 = items.get(0);
-            Item item2 = items.get(1);
+            item1 = items.get(0);
+            item2 = items.get(1);
 
-            Member member1 = members.get(0);
-            Member member2 = members.get(0);
+            member1 = members.get(0);
+            member2 = members.get(0);
 
-            Delivery delivery1 = deliveries.get(0);
-            Delivery delivery2 = deliveries.get(1);
+            delivery1 = deliveries.get(0);
+            delivery2 = deliveries.get(1);
 
-            Order order1 = Order.createOrder(110000, member1, delivery1);
-//            Order order2 = Order.createOrder(120000, member2, delivery2);
+            Order order1 = Order.createOrder(member1, delivery1);
+            Order order2 = Order.createOrder(member2, delivery2);
             em.persist(order1);
-//            em.persist(order2);
+            em.persist(order2);
 
             OrderItem orderItem1 = OrderItem.createOrderItem(order1, item1, 1);
             OrderItem orderItem2 = OrderItem.createOrderItem(order1, item2, 2);
@@ -83,8 +117,8 @@ public class InitH2DB {
         }
 
         public List<Delivery> initDelivery(List<Member> members) {
-            Member member1 = members.get(0);
-            Member member2 = members.get(1);
+            member1 = members.get(0);
+            member2 = members.get(1);
 
             List<Delivery> deliveryInfos = Arrays.asList(
                     Delivery.createDelivery("서울 금천구 가산디지털1로 189 (주)LG 가산 디지털센터 12층", "010-1111-2222",
@@ -100,11 +134,7 @@ public class InitH2DB {
             return deliveryInfos;
         }
 
-        public void initFunding(List<Member> members, List<Item> items) {
-            // item 초기화
-            Item item1 = items.get(0);
-            Item item2 = items.get(1);
-
+        public List<Funding> initFunding(List<Member> members, List<Item> items) {
             /**
              * member1(임창희 관련) 초기화
              *
@@ -123,28 +153,32 @@ public class InitH2DB {
              * item1, funding3 -> fundingItem3
              * item2, funding3 -> fundingItem4
              */
-            Member member1 = members.get(0);
+            member1 = members.get(0);
+            member2 = members.get(1);
+            member3 = members.get(2);
+            member4 = members.get(3);
 
-            GiftHubItem giftHubItem1 = GiftHubItem.createGiftHubItem(1, item1, member1);
-            GiftHubItem giftHubItem2 = GiftHubItem.createGiftHubItem(1, item2, member1);
-            em.persist(giftHubItem1);
-            em.persist(giftHubItem2);
+            for (Item item : items) {
+                giftHubItem1 = GiftHubItem.createGiftHubItem(1, item, member1);
+                giftHubItem2 = GiftHubItem.createGiftHubItem(1, item, member2);
+                em.persist(giftHubItem1);
+                em.persist(giftHubItem2);
+            }
 
-            Funding funding1 = Funding.createFunding(member1, "생일축하해줘", Tag.BIRTHDAY, 100000,
-                    LocalDateTime.now().plusDays(14));
-            Funding funding3 = Funding.createFundingForTest(member1, "생일 축하~",
+            funding1 = Funding.createFundingForTest(member1, "1번 생일축하해줘", Tag.BIRTHDAY, 10000,
+                    LocalDateTime.now().plusDays(14), true);
+            funding2 = Funding.createFundingForTest(member2, "2번 생일 축하~",
                     Tag.BIRTHDAY, 100000,
-                    10000, LocalDateTime.now().plusDays(14));
+                    LocalDateTime.now().plusDays(14), true);
             em.persist(funding1);
-            em.persist(funding3);
+            em.persist(funding2);
 
-            FundingItem fundingItem1 = FundingItem.createFundingItem(funding1, item1, 1);
-            FundingItem fundingItem2 = FundingItem.createFundingItem(funding1, item2, 2);
+            fundingItem1 = FundingItem.createFundingItem(funding1, item1, 1);
+            fundingItem2 = FundingItem.createFundingItem(funding1, item2, 2);
             em.persist(fundingItem1);
             em.persist(fundingItem2);
-
-            FundingItem fundingItem3 = FundingItem.createFundingItem(funding3, item1, 1);
-            FundingItem fundingItem4 = FundingItem.createFundingItem(funding3, item2, 2);
+            fundingItem3 = FundingItem.createFundingItem(funding2, item1, 1);
+            fundingItem4 = FundingItem.createFundingItem(funding2, item2, 2);
             em.persist(fundingItem3);
             em.persist(fundingItem4);
 
@@ -159,27 +193,33 @@ public class InitH2DB {
              * item1, funding4 -> fundingItem5
              * item2, funding6 -> fundingItem6
              */
-            Member member2 = members.get(1);
 
-            Funding funding2 = Funding.createFunding(member2, "드디어 졸업 성공~~", Tag.GRADUATE, 200000,
+            funding3 = Funding.createFunding(member3, "드디어 졸업 성공~~", Tag.GRADUATE,
                     LocalDateTime.now().plusDays(7));
-            Funding funding4 = Funding.createFundingForTest(member2, "드디어 졸업 성공~~",
+            funding4 = Funding.createFundingForTest(member4, "졸업 성공~~",
                     Tag.GRADUATE, 200000,
-                    110000, LocalDateTime.now().plusDays(7));
-            em.persist(funding2);
+                    LocalDateTime.now().plusDays(7), true);
+            em.persist(funding3);
             em.persist(funding4);
 
-            FundingItem fundingItem5 = FundingItem.createFundingItem(funding4, item1, 1);
-            FundingItem fundingItem6 = FundingItem.createFundingItem(funding4, item2, 2);
+            FundingItem fundingItem5 = FundingItem.createFundingItem(funding3, item1, 1);
+            FundingItem fundingItem6 = FundingItem.createFundingItem(funding3, item2, 2);
             em.persist(fundingItem5);
             em.persist(fundingItem6);
+
+            FundingItem fundingItem7 = FundingItem.createFundingItem(funding4, item1, 1);
+            FundingItem fundingItem8 = FundingItem.createFundingItem(funding4, item2, 2);
+            em.persist(fundingItem7);
+            em.persist(fundingItem8);
+
+            return List.of(funding1, funding2, funding3, funding4);
         }
 
         public void initRelationships(List<Member> members) {
-            Member member1 = members.get(0);
-            Member member2 = members.get(1);
-            Member member5 = members.get(4);
-            Member member6 = members.get(5);
+            member1 = members.get(0);
+            member2 = members.get(1);
+            member5 = members.get(4);
+            member6 = members.get(5);
 
             List<Relationship> relationshipList = Relationship.createRelationships(member1,
                     member2);
@@ -234,29 +274,19 @@ public class InitH2DB {
             return memberInfos;
         }
 
-        public void initContributor(List<Member> members, List<Item> items) {
+        public void initContributor(List<Member> members, List<Funding> fundings) {
+            member3 = members.get(3);
+            member4 = members.get(4);
+            member5 = members.get(5);
 
-            Member member = members.get(0);
-            Member member1 = members.get(4);
-            Member member2 = members.get(5);
+            funding1 = fundings.get(0);
 
-            Funding funding = Funding.createFundingForTest(member, "줘", Tag.BIRTHDAY, 112000,
-                    30000,
-                    LocalDateTime.now().plusDays(14));
-            em.persist(funding);
-
-            Item item1 = items.get(0);
-            Item item2 = items.get(1);
-
-            FundingItem fundingItem1 = FundingItem.createFundingItem(funding, item1, 1);
-            FundingItem fundingItem2 = FundingItem.createFundingItem(funding, item2, 2);
-            em.persist(fundingItem1);
-            em.persist(fundingItem2);
-
-            Contributor contributor1 = Contributor.createContributor(10000, member1, funding);
-            Contributor contributor2 = Contributor.createContributor(20000, member2, funding);
+            Contributor contributor1 = Contributor.createContributor(10000, member3, funding1);
+            Contributor contributor2 = Contributor.createContributor(20000, member4, funding1);
+            Contributor contributor3 = Contributor.createContributor(20000, member5, funding1);
             em.persist(contributor1);
             em.persist(contributor2);
+            em.persist(contributor3);
         }
 
         public List<Item> initBeauty() {
@@ -309,20 +339,20 @@ public class InitH2DB {
 
         public void initBookmark(List<Member> members, List<Item> items) {
 
-            Member member1 = members.get(0);
-            Member member2 = members.get(1);
+            member1 = members.get(0);
+            member2 = members.get(1);
 
-            Item item1 = items.get(0);
-            Item item2 = items.get(1);
-            Item item3 = items.get(2);
-            Item item4 = items.get(3);
-            Item item5 = items.get(4);
+            item1 = items.get(0);
+            item2 = items.get(1);
+            item3 = items.get(2);
+            item4 = items.get(3);
+            item5 = items.get(4);
 
-            Bookmark bookmark1 = Bookmark.createBookmark(member1, item1);
-            Bookmark bookmark2 = Bookmark.createBookmark(member1, item2);
-            Bookmark bookmark3 = Bookmark.createBookmark(member2, item3);
-            Bookmark bookmark4 = Bookmark.createBookmark(member2, item4);
-            Bookmark bookmark5 = Bookmark.createBookmark(member2, item5);
+            bookmark1 = Bookmark.createBookmark(member1, item1);
+            bookmark2 = Bookmark.createBookmark(member1, item2);
+            bookmark3 = Bookmark.createBookmark(member2, item3);
+            bookmark4 = Bookmark.createBookmark(member2, item4);
+            bookmark5 = Bookmark.createBookmark(member2, item5);
 
             em.persist(bookmark1);
             em.persist(bookmark2);

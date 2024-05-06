@@ -6,7 +6,6 @@ import kcs.funding.fundingboost.domain.dto.global.ResponseDto;
 import kcs.funding.fundingboost.domain.dto.request.fundingRegist.RegisterFundingDto;
 import kcs.funding.fundingboost.domain.dto.response.friendFunding.FriendFundingDto;
 import kcs.funding.fundingboost.domain.dto.response.friendFundingDetail.FriendFundingDetailDto;
-import kcs.funding.fundingboost.domain.dto.response.fundingRegist.FundingRegistrationItemDto;
 import kcs.funding.fundingboost.domain.dto.response.home.HomeViewDto;
 import kcs.funding.fundingboost.domain.dto.response.myPage.friendFundingHistory.FriendFundingHistoryDto;
 import kcs.funding.fundingboost.domain.dto.response.myPage.myFundingHistory.MyFundingHistoryDto;
@@ -33,17 +32,6 @@ public class FundingController {
     @GetMapping("/api/v1/home")
     public ResponseDto<HomeViewDto> home(@RequestParam("memberId") Long memberId) {
         return ResponseDto.ok(fundingService.getMainView(memberId));
-    }
-
-    /**
-     * 펀딩 등록 페이지 조회
-     */
-    @GetMapping("/api/v1/funding")
-    public ResponseDto<List<FundingRegistrationItemDto>> viewFundingRegistration(
-            @RequestParam(name = "memberId") Long memberId,
-            @RequestParam(name = "ItemList") List<Long> registerFundingBringItemDto
-    ) {
-        return ResponseDto.ok(fundingService.getFundingRegister(registerFundingBringItemDto, memberId));
     }
 
     /**

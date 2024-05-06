@@ -11,7 +11,9 @@ public record MyFundingStatusDto(
         List<ParticipateFriendDto> participateFriendDtoList,
         int totalPercent,
         String deadline,        // 2024.06.11
-        String deadlineDate     //D-3
+        String deadlineDate,     //D-3
+        String tag,
+        String message
 ) {
     public static MyFundingStatusDto createMyFundingStatusDto(
             MyPageMemberDto myPageMemberDto,
@@ -19,7 +21,9 @@ public record MyFundingStatusDto(
             List<ParticipateFriendDto> participateFriendDtoList,
             int totalPercent,
             String deadline,
-            String deadlineDate
+            String deadlineDate,
+            String tag,
+            String message
     ) {
         return MyFundingStatusDto.builder()
                 .myPageMemberDto(myPageMemberDto)
@@ -28,6 +32,8 @@ public record MyFundingStatusDto(
                 .totalPercent(totalPercent)
                 .deadline(deadline)
                 .deadlineDate(deadlineDate)
+                .tag(tag)
+                .message(message)
                 .build();
     }
 

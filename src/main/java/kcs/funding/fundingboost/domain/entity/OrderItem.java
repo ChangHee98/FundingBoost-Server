@@ -45,6 +45,7 @@ public class OrderItem {
         orderItem.order = order;
         orderItem.item = item;
         orderItem.quantity = quantity;
+        order.plusTotalPrice(item.getItemPrice() * quantity);
         return orderItem;
     }
 }
