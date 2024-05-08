@@ -80,15 +80,6 @@ tasks.named('test') {
 }
 
 bootJar {
-    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
-    dependsOn asciidoctor
-    copy {
-        // src/docs/asciidoc == from 경로
-        from "${asciidoctor.outputDir}"
-        into 'src/main/resources/static/docs' // /static/docs로 복사!
-    }
+    mainClass = 'kcs.funding.fundingboost'
 }
 
-jar {
-    enabled = true
-}
