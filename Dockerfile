@@ -19,9 +19,6 @@ RUN gradle wrapper
 # gradlew를 이용한 프로젝트 필드
 RUN chmod +x gradlew
 
-# gradle:7.3.1-jdk17 이미지를 기반으로 함
-FROM krmp-d2hub-idock.9rum.cc/goorm/gradle:7.3.1-jdk17
-
 # gradlew를 이용한 프로젝트 필드
 RUN ./gradlew clean build 
 
