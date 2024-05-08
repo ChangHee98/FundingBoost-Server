@@ -78,3 +78,17 @@ clean {
 tasks.named('test') {
     useJUnitPlatform()
 }
+
+bootJar {
+    duplicatesStrategy = DuplicatesStrategy.EXCLUDE
+    dependsOn asciidoctor
+    copy {
+        // src/docs/asciidoc == from 경로
+        from "${asciidoctor.outputDir}"
+        into 'src/main/resources/static/docs' // /static/docs로 복사!
+    }
+}
+
+jar {
+    enabled = true
+}
