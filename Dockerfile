@@ -17,7 +17,7 @@ RUN gradle wrapper
 RUN chmod +x gradlew
 
 # gradlew를 이용한 프로젝트 필드
-RUN ./gradlew clean build 
+RUN ./gradlew build 
 
 # DATABASE_URL을 환경 변수로 삽입
 ENV DATABASE_URL=jdbc:mysql://mysql/fundingboost
