@@ -14,7 +14,7 @@ RUN echo "systemProp.http.proxyHost=krmp-proxy.9rum.cc\nsystemProp.http.proxyPor
 RUN gradle init
 
 # gradle wrapper를 프로젝트에 추가
-RUN gradlew wrapper
+RUN gradle wrapper
 
 # gradlew를 이용한 프로젝트 필드
 RUN chmod +x gradlew
