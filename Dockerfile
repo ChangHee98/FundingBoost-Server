@@ -27,4 +27,4 @@ RUN ./gradlew clean build
 ENV DATABASE_URL=jdbc:mysql://mysql:3306/fundingboost
 
 # 빌드 결과 jar 파일을 실행
-CMD ["java", "-jar", "-Dspring.profiles.active=local", "/home/gradle/project/build/libs/FundingBoost-0.0.1-SNAPSHOT.jar"]
+CMD ["java", "-jar", "-Dspring.profiles.active=prod", "/home/gradle/project/build/libs/FundingBoost-0.0.1-SNAPSHOT.jar"]
