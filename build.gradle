@@ -80,6 +80,9 @@ tasks.named('test') {
 }
 
 bootJar {
-    mainClass = 'kcs.funding.fundingboost'
+    mainClass = 'kcs.funding.fundingboost.FundingBoostApplication'
 }
 
+jar {
+    enabled = false
+}
