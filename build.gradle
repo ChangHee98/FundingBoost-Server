@@ -84,5 +84,6 @@ bootJar {
 }
 
 jar {
-    enabled = false
+	enabled = false
 }
+
