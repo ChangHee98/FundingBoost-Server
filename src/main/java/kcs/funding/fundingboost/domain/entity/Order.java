@@ -35,7 +35,7 @@ public class Order extends BaseTimeEntity {
 
 
     @ManyToOne(fetch = LAZY)
-    @JoinColumn(name = "memeber_id")
+    @JoinColumn(name = "member_id")
     @OnDelete(action = OnDeleteAction.CASCADE)
     private Member member;
 

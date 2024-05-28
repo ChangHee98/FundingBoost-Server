@@ -1,5 +1,6 @@
 spring:
   profiles:
+    active: prod
     include: oauth
   jpa:
     hibernate:
@@ -23,8 +24,8 @@ spring:
       lock:
         host: localhost
         port: 6380
-  
-  
+
+
   h2:
     console:
       enabled: true

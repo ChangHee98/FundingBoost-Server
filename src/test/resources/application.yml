@@ -1,31 +1,10 @@
+server:
+  servlet:
+    encoding:
+      charset: utf-8
+      force: true
+  port: 8080
 spring:
-  profiles:
-    include: oauth
-  jpa:
-    hibernate:
-      ddl-auto: create-drop
-    properties:
-      hibernate:
-        format_sql: true
-        use_sql_comments: true
-        default_batch_fetch_size: 3
-    database-platform: org.hibernate.dialect.H2Dialect
-
-  data:
-    redis:
-      refresh-token:
-        host: localhost
-        port: 6379
-      lock:
-        host: localhost
-        port: 6380
-    web:
-      pageable:
-        default-page-size: 10
-    #        one-indexed-parameters: true
-
-
-
   h2:
     console:
       enabled: true
@@ -35,8 +14,27 @@ spring:
     username: sa
     password:
     driver-class-name: org.h2.Driver
+  jpa:
+    hibernate:
+      ddl-auto: create
+    show-sql: true
+    properties:
+      hibernate:
+        format_sql: true
+      default_batch_fetch_size: 100
+    open-in-view: false
+  output:
+    ansi:
+      enabled: always
+
+logging:
+  level:
+    '[kcs.funding.fundingboost]': DEBUG
+    '[org.hibernate.type]': TRACE
+
+file:
+  path: ./images/
 
 springdoc:
   swagger-ui:
     path: /swagger-ui.html
-
