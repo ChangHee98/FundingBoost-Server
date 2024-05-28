@@ -29,7 +29,7 @@ spring:
 
 logging:
   level:
-    '[com.example.kakao]': DEBUG
+    '[kcs.funding.fundingboost]': DEBUG
     '[org.hibernate.type]': TRACE
 
 file:

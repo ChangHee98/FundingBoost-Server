@@ -15,4 +15,3 @@
 ### 관련 지라 및 위키 링크
 [FB-num](https://kcsfinalproject.atlassian.net/browse/FB-num)
 ### 리뷰어에게 하고 싶은 말
-
