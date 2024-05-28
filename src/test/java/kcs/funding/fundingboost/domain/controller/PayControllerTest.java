@@ -2,6 +2,7 @@ package kcs.funding.fundingboost.domain.controller;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.http.MediaType.APPLICATION_JSON;
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.csrf;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.get;
 import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.post;
 import static org.springframework.test.web.servlet.result.MockMvcResultHandlers.print;
@@ -25,13 +26,14 @@ import kcs.funding.fundingboost.domain.entity.Funding;
 import kcs.funding.fundingboost.domain.entity.FundingItem;
 import kcs.funding.fundingboost.domain.entity.GiftHubItem;
 import kcs.funding.fundingboost.domain.entity.Item;
-import kcs.funding.fundingboost.domain.entity.Member;
+import kcs.funding.fundingboost.domain.entity.member.Member;
 import kcs.funding.fundingboost.domain.model.DeliveryFixture;
 import kcs.funding.fundingboost.domain.model.FundingFixture;
 import kcs.funding.fundingboost.domain.model.FundingItemFixture;
 import kcs.funding.fundingboost.domain.model.GiftHubItemFixture;
 import kcs.funding.fundingboost.domain.model.ItemFixture;
 import kcs.funding.fundingboost.domain.model.MemberFixture;
+import kcs.funding.fundingboost.domain.model.SecurityContextHolderFixture;
 import kcs.funding.fundingboost.domain.service.pay.FriendPayService;
 import kcs.funding.fundingboost.domain.service.pay.MyPayService;
 import org.junit.jupiter.api.BeforeEach;
@@ -58,8 +60,10 @@ class PayControllerTest {
     private ObjectMapper objectMapper;
 
     private Member member;
+    private Member friend;
     private FundingItem fundingItem;
     private Funding funding;
+    private Funding friendFunding;
     private Item item;
     private GiftHubItem giftHubItem;
     private Delivery delivery;
@@ -68,9 +72,12 @@ class PayControllerTest {
     @BeforeEach
     void setUp() throws NoSuchFieldException, IllegalAccessException {
         member = MemberFixture.member1();
+        SecurityContextHolderFixture.setContext(member);
+        friend = MemberFixture.member2();
         delivery = DeliveryFixture.address1(member);
         item = ItemFixture.item1();
         funding = FundingFixture.Birthday(member);
+        friendFunding = FundingFixture.Graduate(friend);
         fundingItem = FundingItemFixture.fundingItem1(item, funding);
         giftHubItem = GiftHubItemFixture.quantity1(item, member);
     }
@@ -85,14 +92,13 @@ class PayControllerTest {
         given(myPayService.myOrderPayView(member.getMemberId())).willReturn(myOrderPayViewDto);
 
         mockMvc.perform(get("/api/v1/pay/view/order")
-                        .param("memberId", member.getMemberId().toString())
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
-                .andExpect(jsonPath("$.data.deliveryListDto[0].deliveryId").value(delivery.getDeliveryId()))
-                .andExpect(jsonPath("$.data.deliveryListDto[0].customerName").value(delivery.getCustomerName()))
-                .andExpect(jsonPath("$.data.deliveryListDto[0].address").value(delivery.getAddress()))
-                .andExpect(jsonPath("$.data.deliveryListDto[0].phoneNumber").value(delivery.getPhoneNumber()))
+                .andExpect(jsonPath("$.data.deliveryDtoList[0].deliveryId").value(delivery.getDeliveryId()))
+                .andExpect(jsonPath("$.data.deliveryDtoList[0].customerName").value(delivery.getCustomerName()))
+                .andExpect(jsonPath("$.data.deliveryDtoList[0].address").value(delivery.getAddress()))
+                .andExpect(jsonPath("$.data.deliveryDtoList[0].phoneNumber").value(delivery.getPhoneNumber()))
                 .andExpect(jsonPath("$.data.point").value(member.getPoint()));
     }
 
@@ -111,7 +117,6 @@ class PayControllerTest {
                 myFundingPayViewDto);
 
         mockMvc.perform(get("/api/v1/pay/view/funding/2")
-                        .param("memberId", member.getMemberId().toString())
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -136,9 +141,9 @@ class PayControllerTest {
         String content = objectMapper.writeValueAsString(myPayDto);
 
         mockMvc.perform(post("/api/v1/pay/order")
-                        .param("memberId", member.getMemberId().toString())
                         .contentType(APPLICATION_JSON)
-                        .content(content))
+                        .content(content)
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.isSuccess").value(true));
     }
@@ -147,22 +152,29 @@ class PayControllerTest {
     @DisplayName("친구 펀딩 결제 페이지 조회")
     @Test
     void viewFriendsFundingDetail() throws Exception {
-        FriendFundingPayingDto friendFundingPayingDto = FriendFundingPayingDto.fromEntity(funding, member.getPoint());
+        // given
+        FriendFundingPayingDto friendFundingPayingDto = FriendFundingPayingDto.fromEntity(friendFunding,
+                member.getPoint());
 
-        given(friendPayService.getFriendFundingPay(funding.getFundingId(), member.getMemberId())).willReturn(
+        given(friendPayService.getFriendFundingPay(friendFunding.getFundingId(), member.getMemberId())).willReturn(
                 friendFundingPayingDto);
 
-        mockMvc.perform(get("/api/v1/pay/friends/{fundingId}", funding.getFundingId())
-                        .param("memberId", member.getMemberId().toString())
+        // when & then
+        mockMvc.perform(get("/api/v1/pay/friends/{fundingId}", friendFunding.getFundingId())
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.success").value(true))
-                .andExpect(jsonPath("$.data.friendName").value("임창희"))
-                .andExpect(jsonPath("$.data.friendProfile").value(
-                        "https://p.kakaocdn.net/th/talkp/wnbbRhlyRW/XaGAXxS1OkUtXnomt6S4IK/ky0f9a_110x110_c.jpg"))
-                .andExpect(jsonPath("$.data.totalPrice").value(61000))
-                .andExpect(jsonPath("$.data.presentPrice").value(197000))
-                .andExpect(jsonPath("$.data.myPoint").value(46000));
+                .andExpect(jsonPath("$.success")
+                        .value(true))
+                .andExpect(jsonPath("$.data.friendName")
+                        .value(friend.getNickName()))
+                .andExpect(jsonPath("$.data.friendProfile")
+                        .value(friend.getProfileImgUrl()))
+                .andExpect(jsonPath("$.data.totalPrice")
+                        .value(friendFunding.getTotalPrice()))
+                .andExpect(jsonPath("$.data.presentPrice")
+                        .value(friendFunding.getCollectPrice()))
+                .andExpect(jsonPath("$.data.myPoint")
+                        .value(46000));
     }
 
     @DisplayName("친구 펀딩 결제하기")
@@ -177,9 +189,9 @@ class PayControllerTest {
         String content = objectMapper.writeValueAsString(friendPayProcessDto);
 
         mockMvc.perform(post("/api/v1/pay/friends/{fundingId}", funding.getFundingId())
-                        .param("memberId", member.getMemberId().toString())
                         .contentType(APPLICATION_JSON)
-                        .content(content))
+                        .content(content)
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.isSuccess").value(true));
     }
@@ -195,9 +207,9 @@ class PayControllerTest {
         String content = objectMapper.writeValueAsString(itemPayNowDto);
 
         mockMvc.perform(post("/api/v1/pay/order/now")
-                        .param("memberId", member.getMemberId().toString())
                         .contentType(APPLICATION_JSON)
-                        .content(content))
+                        .content(content)
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andDo(print())
                 .andExpect(jsonPath("$.data.isSuccess").value(true));
@@ -215,9 +227,9 @@ class PayControllerTest {
         String content = objectMapper.writeValueAsString(payRemainDto);
 
         mockMvc.perform(post("/api/v1/pay/funding/{fundingItemId}", fundingItem.getFundingItemId())
-                        .param("memberId", member.getMemberId().toString())
                         .contentType(APPLICATION_JSON)
-                        .content(content))
+                        .content(content)
+                        .with(csrf()))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.data.isSuccess").value(true));
 

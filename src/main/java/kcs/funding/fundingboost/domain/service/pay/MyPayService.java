@@ -8,6 +8,7 @@ import static kcs.funding.fundingboost.domain.exception.ErrorCode.NOT_FOUND_ITEM
 import static kcs.funding.fundingboost.domain.exception.ErrorCode.NOT_FOUND_MEMBER;
 import static kcs.funding.fundingboost.domain.exception.ErrorCode.ONGOING_FUNDING_ERROR;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -23,16 +24,16 @@ import kcs.funding.fundingboost.domain.dto.response.pay.myPay.MyOrderPayViewDto;
 import kcs.funding.fundingboost.domain.entity.Delivery;
 import kcs.funding.fundingboost.domain.entity.FundingItem;
 import kcs.funding.fundingboost.domain.entity.Item;
-import kcs.funding.fundingboost.domain.entity.Member;
 import kcs.funding.fundingboost.domain.entity.Order;
 import kcs.funding.fundingboost.domain.entity.OrderItem;
+import kcs.funding.fundingboost.domain.entity.member.Member;
 import kcs.funding.fundingboost.domain.exception.CommonException;
 import kcs.funding.fundingboost.domain.repository.DeliveryRepository;
-import kcs.funding.fundingboost.domain.repository.ItemRepository;
 import kcs.funding.fundingboost.domain.repository.MemberRepository;
 import kcs.funding.fundingboost.domain.repository.OrderRepository;
 import kcs.funding.fundingboost.domain.repository.fundingItem.FundingItemRepository;
 import kcs.funding.fundingboost.domain.repository.giftHubItem.GiftHubItemRepository;
+import kcs.funding.fundingboost.domain.repository.item.ItemRepository;
 import kcs.funding.fundingboost.domain.repository.orderItem.OrderItemRepository;
 import kcs.funding.fundingboost.domain.service.utils.PayUtils;
 import lombok.RequiredArgsConstructor;
@@ -66,7 +67,7 @@ public class MyPayService {
             throw new CommonException(INVALID_FUNDINGITEM_STATUS);
         }
         // 펀딩 진행중일 때
-        if (fundingItem.get().getFunding().isFundingStatus()) {
+        if (fundingItem.get().getFunding().getDeadline().isAfter(LocalDateTime.now())) {
             throw new CommonException(ONGOING_FUNDING_ERROR);
         }
         // 로그인 한 사용자와 일치하는 지 확인

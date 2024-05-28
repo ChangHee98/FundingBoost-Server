@@ -13,14 +13,15 @@ import kcs.funding.fundingboost.domain.dto.response.myPage.orderHistory.OrderHis
 import kcs.funding.fundingboost.domain.dto.response.myPage.orderHistory.OrderHistoryItemDto;
 import kcs.funding.fundingboost.domain.entity.Delivery;
 import kcs.funding.fundingboost.domain.entity.Item;
-import kcs.funding.fundingboost.domain.entity.Member;
 import kcs.funding.fundingboost.domain.entity.Order;
 import kcs.funding.fundingboost.domain.entity.OrderItem;
+import kcs.funding.fundingboost.domain.entity.member.Member;
 import kcs.funding.fundingboost.domain.model.DeliveryFixture;
 import kcs.funding.fundingboost.domain.model.ItemFixture;
 import kcs.funding.fundingboost.domain.model.MemberFixture;
 import kcs.funding.fundingboost.domain.model.OrderFixture;
 import kcs.funding.fundingboost.domain.model.OrderItemFixture;
+import kcs.funding.fundingboost.domain.model.SecurityContextHolderFixture;
 import kcs.funding.fundingboost.domain.service.OrderService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -47,6 +48,7 @@ class OrderControllerTest {
     @BeforeEach
     void setUp() throws NoSuchFieldException, IllegalAccessException {
         member = MemberFixture.member1();
+        SecurityContextHolderFixture.setContext(member);
         delivery = DeliveryFixture.address1(member);
         item = ItemFixture.item1();
         order = OrderFixture.order1(member, delivery);
@@ -66,7 +68,6 @@ class OrderControllerTest {
                 .willReturn(OrderHistoryDto.fromEntity(myPageMemberDto, orderHistoryItemDtoList));
 
         mockMvc.perform(get("/api/v1/order/history")
-                        .param("memberId", String.valueOf(member.getMemberId()))
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())
@@ -97,7 +98,6 @@ class OrderControllerTest {
                 .willReturn(OrderHistoryDto.fromEntity(myPageMemberDto, null));
 
         mockMvc.perform(get("/api/v1/order/history")
-                        .param("memberId", String.valueOf(member.getMemberId()))
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andDo(print())

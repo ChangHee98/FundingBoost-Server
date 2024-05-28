@@ -12,6 +12,7 @@ import static org.junit.jupiter.api.Assertions.assertNotNull;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 import static org.mockito.ArgumentMatchers.any;
+import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.times;
 import static org.mockito.Mockito.verify;
 import static org.mockito.Mockito.when;
@@ -32,9 +33,9 @@ import kcs.funding.fundingboost.domain.entity.Funding;
 import kcs.funding.fundingboost.domain.entity.FundingItem;
 import kcs.funding.fundingboost.domain.entity.GiftHubItem;
 import kcs.funding.fundingboost.domain.entity.Item;
-import kcs.funding.fundingboost.domain.entity.Member;
 import kcs.funding.fundingboost.domain.entity.Order;
 import kcs.funding.fundingboost.domain.entity.OrderItem;
+import kcs.funding.fundingboost.domain.entity.member.Member;
 import kcs.funding.fundingboost.domain.exception.CommonException;
 import kcs.funding.fundingboost.domain.model.DeliveryFixture;
 import kcs.funding.fundingboost.domain.model.FundingFixture;
@@ -43,20 +44,21 @@ import kcs.funding.fundingboost.domain.model.GiftHubItemFixture;
 import kcs.funding.fundingboost.domain.model.ItemFixture;
 import kcs.funding.fundingboost.domain.model.MemberFixture;
 import kcs.funding.fundingboost.domain.repository.DeliveryRepository;
-import kcs.funding.fundingboost.domain.repository.ItemRepository;
 import kcs.funding.fundingboost.domain.repository.MemberRepository;
 import kcs.funding.fundingboost.domain.repository.OrderRepository;
 import kcs.funding.fundingboost.domain.repository.fundingItem.FundingItemRepository;
 import kcs.funding.fundingboost.domain.repository.giftHubItem.GiftHubItemRepository;
+import kcs.funding.fundingboost.domain.repository.item.ItemRepository;
 import kcs.funding.fundingboost.domain.repository.orderItem.OrderItemRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.springframework.boot.test.context.SpringBootTest;
+import org.mockito.junit.jupiter.MockitoExtension;
 
-@SpringBootTest
+@ExtendWith(MockitoExtension.class)
 class MyPayServiceTest {
 
     @Mock
@@ -197,10 +199,10 @@ class MyPayServiceTest {
         //then
         assertNotNull(result);
         assertEquals(member1.getPoint(), result.point());
-        assertEquals(1, result.deliveryListDto().size());
-        assertEquals("경기도 성남시 분당구 판교역로 166", result.deliveryListDto().get(0).address());
-        assertEquals("장이수", result.deliveryListDto().get(0).customerName());
-        assertEquals("010-1234-5678", result.deliveryListDto().get(0).phoneNumber());
+        assertEquals(1, result.deliveryDtoList().size());
+        assertEquals("경기도 성남시 분당구 판교역로 166", result.deliveryDtoList().get(0).address());
+        assertEquals("장이수", result.deliveryDtoList().get(0).customerName());
+        assertEquals("010-1234-5678", result.deliveryDtoList().get(0).phoneNumber());
         assertEquals(member1.getPoint(), result.point());
 
         verify(memberRepository, times(1)).findById(member1.getMemberId());
@@ -211,12 +213,12 @@ class MyPayServiceTest {
     @Test
     void myOrderPayView_Fail_MemberNotFound() {
         //given
-        when(memberRepository.findById(member1.getMemberId())).thenReturn(Optional.of(member1));
-        when(deliveryRepository.findAllByMemberId(member1.getMemberId())).thenReturn(List.of(delivery1));
+        when(memberRepository.findById(anyLong())).thenReturn(Optional.empty());
+        when(deliveryRepository.findAllByMemberId(anyLong())).thenReturn(List.of());
 
         //when
         CommonException exception = assertThrows(CommonException.class,
-                () -> myPayService.myOrderPayView(member2.getMemberId()));
+                () -> myPayService.myOrderPayView(anyLong()));
 
         //then
         assertEquals(NOT_FOUND_MEMBER.getMessage(), exception.getMessage());
@@ -259,7 +261,6 @@ class MyPayServiceTest {
     @Test
     public void payMyItem_Fail_MemberNotFound() {
         // given
-        List<Item> expectedItems = List.of(item1, item2);
         List<ItemPayDto> itemPayDtoList = List.of(
                 new ItemPayDto(item1.getItemId(), giftHubItem.getGiftHubItemId(), giftHubItem.getQuantity()),
                 new ItemPayDto(item2.getItemId(), giftHubItem.getGiftHubItemId(), giftHubItem.getQuantity()));
@@ -267,26 +268,20 @@ class MyPayServiceTest {
         int usingPoint = 10000;
         MyPayDto myPayDto = new MyPayDto(itemPayDtoList, deliveryId, usingPoint);
 
-        List<Long> itemIds = myPayDto.itemPayDtoList().stream()
-                .map(ItemPayDto::itemId)
-                .collect(Collectors.toList());
-        when(memberRepository.findById(member1.getMemberId())).thenReturn(Optional.of(member1));
-        when(deliveryRepository.findById(delivery1.getDeliveryId())).thenReturn(Optional.of(delivery1));
-        when(itemRepository.findItemsByItemIds(itemIds)).thenReturn(expectedItems);
+        when(memberRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         //when
         CommonException exception = assertThrows(CommonException.class,
-                () -> myPayService.payMyItem(myPayDto, member2.getMemberId()));
+                () -> myPayService.payMyItem(myPayDto, anyLong()));
 
         //then
         assertEquals(NOT_FOUND_MEMBER.getMessage(), exception.getMessage());
     }
 
-    @DisplayName("상품 구매하기 실패 : 배송지 목록에 존재하지 않는 경우")
+    @DisplayName("상품 구매하기 실패 : 배송지 목록이 존재하지 않는 경우")
     @Test
     public void payMyItem_Fail_DeliveryNotFound() {
         // given
-        List<Item> expectedItems = List.of(item1, item2);
         List<ItemPayDto> itemPayDtoList = List.of(
                 new ItemPayDto(item1.getItemId(), giftHubItem.getGiftHubItemId(), giftHubItem.getQuantity()),
                 new ItemPayDto(item2.getItemId(), giftHubItem.getGiftHubItemId(), giftHubItem.getQuantity()));
@@ -294,12 +289,8 @@ class MyPayServiceTest {
         int usingPoint = 10000;
         MyPayDto myPayDto = new MyPayDto(itemPayDtoList, deliveryId, usingPoint);
 
-        List<Long> itemIds = myPayDto.itemPayDtoList().stream()
-                .map(ItemPayDto::itemId)
-                .collect(Collectors.toList());
         when(memberRepository.findById(member1.getMemberId())).thenReturn(Optional.of(member1));
-        when(deliveryRepository.findById(delivery1.getDeliveryId())).thenReturn(Optional.empty());
-        when(itemRepository.findItemsByItemIds(itemIds)).thenReturn(expectedItems);
+        when(deliveryRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         //when
         CommonException exception = assertThrows(CommonException.class,
@@ -313,7 +304,6 @@ class MyPayServiceTest {
     @Test
     public void payMyItem_Fail_IncorrectDelivery() {
         // given
-        List<Item> expectedItems = List.of(item1, item2);
         List<ItemPayDto> itemPayDtoList = List.of(
                 new ItemPayDto(item1.getItemId(), giftHubItem.getGiftHubItemId(), giftHubItem.getQuantity()),
                 new ItemPayDto(item2.getItemId(), giftHubItem.getGiftHubItemId(), giftHubItem.getQuantity()));
@@ -321,12 +311,8 @@ class MyPayServiceTest {
         int usingPoint = 10000;
         MyPayDto myPayDto = new MyPayDto(itemPayDtoList, deliveryId, usingPoint);
 
-        List<Long> itemIds = myPayDto.itemPayDtoList().stream()
-                .map(ItemPayDto::itemId)
-                .collect(Collectors.toList());
         when(memberRepository.findById(member1.getMemberId())).thenReturn(Optional.of(member1));
         when(deliveryRepository.findById(delivery2.getDeliveryId())).thenReturn(Optional.of(delivery2));
-        when(itemRepository.findItemsByItemIds(itemIds)).thenReturn(expectedItems);
 
         //when
         CommonException exception = assertThrows(CommonException.class,
@@ -340,18 +326,13 @@ class MyPayServiceTest {
     @Test
     public void payMyItem_Fail_ItemListIsEmpty() {
         // given
-        List<Item> expectedItems = List.of(item1, item2);
         List<ItemPayDto> itemPayDtoList = Collections.emptyList();
         Long deliveryId = delivery1.getDeliveryId();
         int usingPoint = 10000;
         MyPayDto myPayDto = new MyPayDto(itemPayDtoList, deliveryId, usingPoint);
 
-        List<Long> itemIds = myPayDto.itemPayDtoList().stream()
-                .map(ItemPayDto::itemId)
-                .collect(Collectors.toList());
-        when(memberRepository.findById(member1.getMemberId())).thenReturn(Optional.of(member1));
-        when(deliveryRepository.findById(delivery1.getDeliveryId())).thenReturn(Optional.of(delivery1));
-        when(itemRepository.findItemsByItemIds(itemIds)).thenReturn(expectedItems);
+        when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member1));
+        when(deliveryRepository.findById(anyLong())).thenReturn(Optional.of(delivery1));
 
         //when
         CommonException exception = assertThrows(CommonException.class,
@@ -447,13 +428,11 @@ class MyPayServiceTest {
         int usingPoint = 10000;
         ItemPayNowDto itemPayNowDto = new ItemPayNowDto(item1.getItemId(), giftHubItem.getQuantity(), deliveryId,
                 usingPoint);
-        when(memberRepository.findById(member1.getMemberId())).thenReturn(Optional.empty());
-        when(deliveryRepository.findById(delivery1.getDeliveryId())).thenReturn(Optional.of(delivery1));
-        when(itemRepository.findById(item1.getItemId())).thenReturn(Optional.of(item1));
+        when(memberRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         //when
         CommonException exception = assertThrows(CommonException.class,
-                () -> myPayService.payMyItemNow(itemPayNowDto, member1.getMemberId()));
+                () -> myPayService.payMyItemNow(itemPayNowDto, anyLong()));
 
         //then
         assertEquals(NOT_FOUND_MEMBER.getMessage(), exception.getMessage());
@@ -467,13 +446,12 @@ class MyPayServiceTest {
         int usingPoint = 10000;
         ItemPayNowDto itemPayNowDto = new ItemPayNowDto(item1.getItemId(), giftHubItem.getQuantity(), deliveryId,
                 usingPoint);
-        when(memberRepository.findById(member1.getMemberId())).thenReturn(Optional.of(member1));
-        when(deliveryRepository.findById(delivery1.getDeliveryId())).thenReturn(Optional.empty());
-        when(itemRepository.findById(item1.getItemId())).thenReturn(Optional.of(item1));
+        when(memberRepository.findById(anyLong())).thenReturn(Optional.of(member1));
+        when(deliveryRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         //when
         CommonException exception = assertThrows(CommonException.class,
-                () -> myPayService.payMyItemNow(itemPayNowDto, member1.getMemberId()));
+                () -> myPayService.payMyItemNow(itemPayNowDto, anyLong()));
 
         //then
         assertEquals(NOT_FOUND_DELIVERY.getMessage(), exception.getMessage());
@@ -489,7 +467,6 @@ class MyPayServiceTest {
                 usingPoint);
         when(memberRepository.findById(member1.getMemberId())).thenReturn(Optional.of(member1));
         when(deliveryRepository.findById(delivery2.getDeliveryId())).thenReturn(Optional.of(delivery2));
-        when(itemRepository.findById(item1.getItemId())).thenReturn(Optional.of(item1));
 
         //when
         CommonException exception = assertThrows(CommonException.class,
@@ -508,8 +485,7 @@ class MyPayServiceTest {
         ItemPayNowDto itemPayNowDto = new ItemPayNowDto(item1.getItemId(), 0, deliveryId,
                 usingPoint);
         when(memberRepository.findById(member1.getMemberId())).thenReturn(Optional.of(member1));
-        when(deliveryRepository.findById(delivery1.getDeliveryId())).thenReturn(Optional.of(delivery1));
-        when(itemRepository.findById(item1.getItemId())).thenReturn(Optional.of(item1));
+        when(deliveryRepository.findById(deliveryId)).thenReturn(Optional.of(delivery1));
 
         //when
         CommonException exception = assertThrows(CommonException.class,
@@ -554,18 +530,17 @@ class MyPayServiceTest {
         PayRemainDto payRemainDto = new PayRemainDto(usingPoint, deliveryId);
         when(fundingItemRepository.findFundingItemAndItemByFundingItemId(fundingItem1.getFundingItemId())).thenReturn(
                 fundingItem1);
-        when(memberRepository.findById(member1.getMemberId())).thenReturn(Optional.of(member1));
-        when(deliveryRepository.findById(delivery1.getDeliveryId())).thenReturn(Optional.of(delivery1));
+        when(memberRepository.findById(anyLong())).thenReturn(Optional.empty());
 
         //when
         CommonException exception = assertThrows(CommonException.class,
-                () -> myPayService.payMyFunding(fundingItem1.getFundingItemId(), payRemainDto, member2.getMemberId()));
+                () -> myPayService.payMyFunding(fundingItem1.getFundingItemId(), payRemainDto, anyLong()));
 
         //then
         assertEquals(NOT_FOUND_MEMBER.getMessage(), exception.getMessage());
     }
 
-    @DisplayName("펀딩 상품 구매하기 실패 : 유저의 배송지 목록이 아닌 경우")
+    @DisplayName("펀딩 상품 구매하기 실패 : 배송지 목록이 없는 경우")
     @Test
     void payMyFunding_Fail_DeliveryNotFound() {
         //given

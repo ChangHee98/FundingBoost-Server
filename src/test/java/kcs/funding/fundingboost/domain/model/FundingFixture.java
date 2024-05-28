@@ -6,18 +6,18 @@ import static kcs.funding.fundingboost.domain.entity.Tag.GRADUATE;
 import java.lang.reflect.Field;
 import java.time.LocalDateTime;
 import kcs.funding.fundingboost.domain.entity.Funding;
-import kcs.funding.fundingboost.domain.entity.Member;
 import kcs.funding.fundingboost.domain.entity.common.BaseTimeEntity;
+import kcs.funding.fundingboost.domain.entity.member.Member;
 
 public class FundingFixture {
 
 
     /**
-     * 펀딩액이 모이지 않은 펀딩 생성 & createdDate 리플렉션
+     * 펀딩액이 모이지 않은 펀딩 생성
      */
     public static Funding Birthday(Member member) throws NoSuchFieldException, IllegalAccessException {
-        Funding funding = Funding.createFundingForTest(member, "생일축하해주세욥 3월21일입니닷", BIRTHDAY, 197000,
-                LocalDateTime.now().plusDays(14), true);
+        Funding funding = Funding.createFunding(member, "생일축하해주세욥 3월21일입니닷", BIRTHDAY,
+                LocalDateTime.now().plusDays(15));
 
         Field fundingId = funding.getClass().getDeclaredField("fundingId");
         fundingId.setAccessible(true);
@@ -34,8 +34,8 @@ public class FundingFixture {
      */
     public static Funding BirthdayWithCollectPrice(Member member, int collectPrice)
             throws NoSuchFieldException, IllegalAccessException {
-        Funding funding = Funding.createFundingForTest(member, "생일축하해주세욥 3월21일입니닷", BIRTHDAY, 98500,
-                LocalDateTime.now().plusDays(14), true);
+        Funding funding = Funding.createFundingForTest(member, "생일축하해주세욥 3월21일입니닷", BIRTHDAY, collectPrice,
+                LocalDateTime.now().plusDays(7), true);
 
         Field fundingId = funding.getClass().getDeclaredField("fundingId");
         fundingId.setAccessible(true);
@@ -56,6 +56,10 @@ public class FundingFixture {
         Field fundingId = funding.getClass().getDeclaredField("fundingId");
         fundingId.setAccessible(true);
         fundingId.set(funding, 3L);
+
+        Field createdDateField = BaseTimeEntity.class.getDeclaredField("createdDate");
+        createdDateField.setAccessible(true);
+        createdDateField.set(funding, LocalDateTime.now());
         return funding;
     }
 
@@ -65,7 +69,7 @@ public class FundingFixture {
     public static Funding terminatedFundingSuccess(Member member, int collectPrice)
             throws NoSuchFieldException, IllegalAccessException {
         Funding funding = Funding.createFundingForTest(member, "졸업축하해주세요 사실 졸업 못했어요ㅠㅠ", GRADUATE, collectPrice,
-                LocalDateTime.now().plusDays(14), false);
+                LocalDateTime.now(), false);
         Field fundingId = funding.getClass().getDeclaredField("fundingId");
         fundingId.setAccessible(true);
         fundingId.set(funding, 4L);
@@ -83,7 +87,7 @@ public class FundingFixture {
     public static Funding terminatedFundingFail(Member member, int collectPrice)
             throws NoSuchFieldException, IllegalAccessException {
         Funding funding = Funding.createFundingForTest(member, "졸업축하해주세요 사실 졸업 못했어요ㅠㅠ", GRADUATE, collectPrice,
-                LocalDateTime.now().plusDays(14), false);
+                LocalDateTime.now(), false);
         Field fundingId = funding.getClass().getDeclaredField("fundingId");
         fundingId.setAccessible(true);
         fundingId.set(funding, 5L);
@@ -98,13 +102,18 @@ public class FundingFixture {
     /**
      * 펀딩액이 얼마 남지 않은 상태
      */
-    public static Funding lowPriceRestFunding(Member member) throws NoSuchFieldException, IllegalAccessException {
+    public static Funding lowPriceRestFunding(Member member)
+            throws NoSuchFieldException, IllegalAccessException {
         Funding funding = Funding.createFundingForTest(member, "생일축하해주세욥 3월21일입니닷", BIRTHDAY, 195000,
-                LocalDateTime.now(), true);
+                LocalDateTime.now().plusDays(4), true);
 
         Field fundingId = funding.getClass().getDeclaredField("fundingId");
         fundingId.setAccessible(true);
         fundingId.set(funding, 6L);
+
+        Field createdDateField = BaseTimeEntity.class.getDeclaredField("createdDate");
+        createdDateField.setAccessible(true);
+        createdDateField.set(funding, LocalDateTime.now());
         return funding;
     }
 }

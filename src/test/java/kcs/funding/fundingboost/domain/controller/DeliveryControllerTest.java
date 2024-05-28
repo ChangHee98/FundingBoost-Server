@@ -12,9 +12,10 @@ import java.util.List;
 import kcs.funding.fundingboost.domain.dto.response.myPage.MyPageMemberDto;
 import kcs.funding.fundingboost.domain.dto.response.myPage.deliveryManage.MyPageDeliveryDto;
 import kcs.funding.fundingboost.domain.dto.response.myPage.deliveryManage.MyPageDeliveryManageDto;
-import kcs.funding.fundingboost.domain.entity.Member;
+import kcs.funding.fundingboost.domain.entity.member.Member;
 import kcs.funding.fundingboost.domain.model.DeliveryFixture;
 import kcs.funding.fundingboost.domain.model.MemberFixture;
+import kcs.funding.fundingboost.domain.model.SecurityContextHolderFixture;
 import kcs.funding.fundingboost.domain.service.DeliveryService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -38,6 +39,7 @@ class DeliveryControllerTest {
     @BeforeEach
     void setUp() throws NoSuchFieldException, IllegalAccessException {
         member = MemberFixture.member1();
+        SecurityContextHolderFixture.setContext(member);
     }
 
     @DisplayName("배송지 관리 조회")
@@ -55,7 +57,6 @@ class DeliveryControllerTest {
 
         // when & then
         mockMvc.perform(get("/api/v1/delivery")
-                        .param("memberId", member.getMemberId().toString())
                         .contentType(APPLICATION_JSON))
                 .andExpect(status().isOk())
                 .andExpect(jsonPath("$.success").value(true))

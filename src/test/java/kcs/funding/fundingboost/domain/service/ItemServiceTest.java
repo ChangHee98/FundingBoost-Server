@@ -12,11 +12,11 @@ import kcs.funding.fundingboost.domain.dto.response.shopping.ShopDto;
 import kcs.funding.fundingboost.domain.dto.response.shoppingDetail.ItemDetailDto;
 import kcs.funding.fundingboost.domain.entity.Bookmark;
 import kcs.funding.fundingboost.domain.entity.Item;
-import kcs.funding.fundingboost.domain.entity.Member;
+import kcs.funding.fundingboost.domain.entity.member.Member;
 import kcs.funding.fundingboost.domain.model.ItemFixture;
 import kcs.funding.fundingboost.domain.model.MemberFixture;
-import kcs.funding.fundingboost.domain.repository.ItemRepository;
 import kcs.funding.fundingboost.domain.repository.bookmark.BookmarkRepository;
+import kcs.funding.fundingboost.domain.repository.item.ItemRepository;
 import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
@@ -25,6 +25,9 @@ import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Slice;
+import org.springframework.data.domain.SliceImpl;
 
 @ExtendWith(MockitoExtension.class)
 class ItemServiceTest {
@@ -49,15 +52,16 @@ class ItemServiceTest {
     void getItems() throws NoSuchFieldException, IllegalAccessException {
         //given
         List<Item> items = ItemFixture.items3();
-        when(itemRepository.findAll()).thenReturn(items);
-
+        Pageable pageable = Pageable.ofSize(3);
+        Slice<Item> itemSlice = new SliceImpl<>(items, pageable, false);
+        when(itemRepository.findItemsByCategory(4L, "뷰티", pageable)).thenReturn(itemSlice);
         //when
-        List<ShopDto> result = itemService.getItems();
+        Slice<ShopDto> result = itemService.getItems(4L, items.get(0).getCategory(), pageable);
 
         //then
         assertNotNull(result);
-        assertEquals(items.size(), result.size());
-        verify(itemRepository, times(1)).findAll();
+        assertEquals(items.size(), result.getSize());
+        verify(itemRepository, times(1)).findItemsByCategory(4L, "뷰티", pageable);
     }
 
     @DisplayName("아이템 상세 조회 : 북마크가 존재하는 경우")

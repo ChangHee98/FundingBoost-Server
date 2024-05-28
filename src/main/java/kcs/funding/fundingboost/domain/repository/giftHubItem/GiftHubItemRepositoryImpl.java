@@ -1,7 +1,7 @@
 package kcs.funding.fundingboost.domain.repository.giftHubItem;
 
 import static kcs.funding.fundingboost.domain.entity.QGiftHubItem.giftHubItem;
-import static kcs.funding.fundingboost.domain.entity.QMember.member;
+import static kcs.funding.fundingboost.domain.entity.member.QMember.member;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;

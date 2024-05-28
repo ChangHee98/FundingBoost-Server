@@ -7,8 +7,8 @@ import static org.mockito.Mockito.mock;
 
 import java.time.LocalDateTime;
 import kcs.funding.fundingboost.domain.entity.Funding;
-import kcs.funding.fundingboost.domain.entity.Member;
 import kcs.funding.fundingboost.domain.entity.Tag;
+import kcs.funding.fundingboost.domain.entity.member.Member;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -36,7 +36,7 @@ class DateUtilsTest {
     @DisplayName("펀딩 마감일이 과거인 경우")
     @Test
     public void testToFundingDeadlineStringWithPastDate() {
-        LocalDateTime pastDate = LocalDateTime.now().minusDays(1);
+        LocalDateTime pastDate = LocalDateTime.now().minusSeconds(1);
         Funding funding = Funding.createFunding(member, FUNDING_MESSAGE, Tag.BIRTHDAY, pastDate);
 
         assertEquals(FUNDING_FINISHED_MESSAGE, toDeadlineString(funding));
@@ -48,7 +48,7 @@ class DateUtilsTest {
         LocalDateTime today = LocalDateTime.now();
         Funding funding = Funding.createFunding(member, FUNDING_MESSAGE, Tag.BIRTHDAY, today);
         String expected = "D-0";
-        
+
         assertEquals(expected, toDeadlineString(funding));
     }
 }

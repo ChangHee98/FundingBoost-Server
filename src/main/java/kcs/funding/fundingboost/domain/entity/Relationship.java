@@ -13,6 +13,7 @@ import jakarta.persistence.Table;
 import java.util.ArrayList;
 import java.util.List;
 import kcs.funding.fundingboost.domain.entity.common.BaseTimeEntity;
+import kcs.funding.fundingboost.domain.entity.member.Member;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;

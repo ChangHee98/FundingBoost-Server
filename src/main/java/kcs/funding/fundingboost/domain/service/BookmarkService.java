@@ -11,11 +11,11 @@ import kcs.funding.fundingboost.domain.dto.response.myPage.wishList.BookmarkItem
 import kcs.funding.fundingboost.domain.dto.response.myPage.wishList.MyBookmarkListDto;
 import kcs.funding.fundingboost.domain.entity.Bookmark;
 import kcs.funding.fundingboost.domain.entity.Item;
-import kcs.funding.fundingboost.domain.entity.Member;
+import kcs.funding.fundingboost.domain.entity.member.Member;
 import kcs.funding.fundingboost.domain.exception.CommonException;
-import kcs.funding.fundingboost.domain.repository.ItemRepository;
 import kcs.funding.fundingboost.domain.repository.MemberRepository;
 import kcs.funding.fundingboost.domain.repository.bookmark.BookmarkRepository;
+import kcs.funding.fundingboost.domain.repository.item.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;

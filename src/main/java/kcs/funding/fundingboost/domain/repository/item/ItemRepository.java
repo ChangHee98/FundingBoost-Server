@@ -1,4 +1,4 @@
-package kcs.funding.fundingboost.domain.repository;
+package kcs.funding.fundingboost.domain.repository.item;
 
 import java.util.List;
 import kcs.funding.fundingboost.domain.entity.Item;
@@ -6,7 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.data.repository.query.Param;
 
-public interface ItemRepository extends JpaRepository<Item, Long> {
+public interface ItemRepository extends JpaRepository<Item, Long>, ItemRepositoryCustom {
 
     @Query("select i from Item i" +
             " where  i in :itemIds")

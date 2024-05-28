@@ -13,9 +13,10 @@ public record MyPageFundingDetailHistoryDto(
         String optionName,
         boolean status,
         int contributorCount,
+        int fundingPercent,
         String tag
 ) {
-    public static MyPageFundingDetailHistoryDto fromEntity(Funding funding, int contributor) {
+    public static MyPageFundingDetailHistoryDto fromEntity(Funding funding, int contributor, int fundingPercent) {
         return MyPageFundingDetailHistoryDto.builder()
                 .fundingId(funding.getFundingId())
                 .createdDate(funding.getCreatedDate().format(DateTimeFormatter.ofPattern("yyyy-MM-dd")))
@@ -24,6 +25,7 @@ public record MyPageFundingDetailHistoryDto(
                 .optionName(funding.getFundingItems().get(0).getItem().getOptionName())
                 .status(funding.getFundingItems().get(0).getFunding().isFundingStatus())
                 .contributorCount(contributor)
+                .fundingPercent(fundingPercent)
                 .tag(funding.getTag().getDisplayName())
                 .build();
     }

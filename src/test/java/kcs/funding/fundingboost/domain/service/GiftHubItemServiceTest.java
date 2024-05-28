@@ -25,13 +25,13 @@ import kcs.funding.fundingboost.domain.dto.request.giftHub.ItemQuantityDto;
 import kcs.funding.fundingboost.domain.dto.response.giftHub.GiftHubDto;
 import kcs.funding.fundingboost.domain.entity.GiftHubItem;
 import kcs.funding.fundingboost.domain.entity.Item;
-import kcs.funding.fundingboost.domain.entity.Member;
+import kcs.funding.fundingboost.domain.entity.member.Member;
 import kcs.funding.fundingboost.domain.exception.CommonException;
 import kcs.funding.fundingboost.domain.model.ItemFixture;
 import kcs.funding.fundingboost.domain.model.MemberFixture;
-import kcs.funding.fundingboost.domain.repository.ItemRepository;
 import kcs.funding.fundingboost.domain.repository.MemberRepository;
 import kcs.funding.fundingboost.domain.repository.giftHubItem.GiftHubItemRepository;
+import kcs.funding.fundingboost.domain.repository.item.ItemRepository;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -105,15 +105,17 @@ class GiftHubItemServiceTest {
     @Test
     void addGiftHub() {
         //given
-        AddGiftHubDto addGiftHubDto = new AddGiftHubDto(member.getMemberId(), 1);
+        AddGiftHubDto addGiftHubDto = new AddGiftHubDto(1);
 
         when(itemRepository.findById(item1.getItemId())).thenReturn(Optional.of(item1));
         when(itemRepository.findById(item2.getItemId())).thenReturn(Optional.of(item2));
         when(memberRepository.findById(member.getMemberId())).thenReturn(Optional.of(member));
 
         // when
-        CommonSuccessDto result1 = giftHubItemService.addGiftHub(item1.getItemId(), addGiftHubDto);
-        CommonSuccessDto result2 = giftHubItemService.addGiftHub(item2.getItemId(), addGiftHubDto);
+        CommonSuccessDto result1 = giftHubItemService.addGiftHub(item1.getItemId(), addGiftHubDto,
+                member.getMemberId());
+        CommonSuccessDto result2 = giftHubItemService.addGiftHub(item2.getItemId(), addGiftHubDto,
+                member.getMemberId());
 
         // then
         assertNotNull(result1);
@@ -129,11 +131,11 @@ class GiftHubItemServiceTest {
     @Test
     void addGiftHub_Fail_ItemNotFound() {
         // given
-        AddGiftHubDto addGiftHubDto = new AddGiftHubDto(member.getMemberId(), 1);
+        AddGiftHubDto addGiftHubDto = new AddGiftHubDto(1);
 
         // when
         Exception exception = assertThrows(CommonException.class, () -> {
-            giftHubItemService.addGiftHub(1L, addGiftHubDto);
+            giftHubItemService.addGiftHub(1L, addGiftHubDto, member.getMemberId());
         });
 
         // then
@@ -147,11 +149,11 @@ class GiftHubItemServiceTest {
         // given
         when(itemRepository.findById(item1.getItemId())).thenReturn(Optional.of(item1));
         when(memberRepository.findById(member.getMemberId())).thenReturn(Optional.empty());
-        AddGiftHubDto addGiftHubDto = new AddGiftHubDto(member.getMemberId(), 1);
+        AddGiftHubDto addGiftHubDto = new AddGiftHubDto(1);
 
         // when
         Exception exception = assertThrows(CommonException.class, () -> {
-            giftHubItemService.addGiftHub(item1.getItemId(), addGiftHubDto);
+            giftHubItemService.addGiftHub(item1.getItemId(), addGiftHubDto, member.getMemberId());
         });
 
         // then

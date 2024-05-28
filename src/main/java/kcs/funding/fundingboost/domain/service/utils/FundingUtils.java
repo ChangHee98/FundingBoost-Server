@@ -6,7 +6,6 @@ import kcs.funding.fundingboost.domain.entity.FundingItem;
 
 public class FundingUtils {
     public static void checkFundingFinished(Funding funding) {
-
         List<FundingItem> fundingItems = funding.getFundingItems();
         for (FundingItem fundingItem : fundingItems) {
             if (fundingItem.isFinishedStatus()) {
@@ -14,5 +13,9 @@ public class FundingUtils {
             }
         }
         funding.finish();
+    }
+
+    public static int calculateFundingPercent(Funding funding) {
+        return funding.getCollectPrice() * 100 / funding.getTotalPrice();
     }
 }

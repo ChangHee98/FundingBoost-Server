@@ -4,9 +4,9 @@ import kcs.funding.fundingboost.domain.entity.GiftHubItem;
 import kcs.funding.fundingboost.domain.entity.Item;
 
 public record GiftHubDto(Long itemId, String itemName, String itemImageUrl,
-                         String optionName, int itemPrice, int quantity) {
+                         String optionName, int itemPrice, int quantity, Long giftHubItemId) {
     public static GiftHubDto createGiftHubDto(Item item, GiftHubItem giftHubItem) {
         return new GiftHubDto(item.getItemId(), item.getItemName(), item.getItemImageUrl(), item.getOptionName(),
-                item.getItemPrice(), giftHubItem.getQuantity());
+                item.getItemPrice(), giftHubItem.getQuantity(), giftHubItem.getGiftHubItemId());
     }
 }
