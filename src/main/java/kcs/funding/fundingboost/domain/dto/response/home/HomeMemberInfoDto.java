@@ -1,6 +1,6 @@
 package kcs.funding.fundingboost.domain.dto.response.home;
 
-import kcs.funding.fundingboost.domain.entity.Member;
+import kcs.funding.fundingboost.domain.entity.member.Member;
 import lombok.Builder;
 
 @Builder

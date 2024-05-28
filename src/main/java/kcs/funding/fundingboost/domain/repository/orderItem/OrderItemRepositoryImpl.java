@@ -1,9 +1,9 @@
 package kcs.funding.fundingboost.domain.repository.orderItem;
 
 import static kcs.funding.fundingboost.domain.entity.QItem.item;
-import static kcs.funding.fundingboost.domain.entity.QMember.member;
 import static kcs.funding.fundingboost.domain.entity.QOrder.order;
 import static kcs.funding.fundingboost.domain.entity.QOrderItem.orderItem;
+import static kcs.funding.fundingboost.domain.entity.member.QMember.member;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.List;

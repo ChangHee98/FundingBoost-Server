@@ -34,3 +34,7 @@ bin/
 
 ### VS Code ###
 .vscode/
+
+### oauth config ###
+src/main/resources/application-oauth.yml
+src/test/resources/application-oauth.yml

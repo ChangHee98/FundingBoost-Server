@@ -6,7 +6,7 @@ import kcs.funding.fundingboost.domain.dto.common.CommonSuccessDto;
 import kcs.funding.fundingboost.domain.dto.request.myPage.myFundingStatus.TransformPointDto;
 import kcs.funding.fundingboost.domain.entity.Funding;
 import kcs.funding.fundingboost.domain.entity.FundingItem;
-import kcs.funding.fundingboost.domain.entity.Member;
+import kcs.funding.fundingboost.domain.entity.member.Member;
 import kcs.funding.fundingboost.domain.exception.CommonException;
 import kcs.funding.fundingboost.domain.exception.ErrorCode;
 import kcs.funding.fundingboost.domain.repository.funding.FundingRepository;
@@ -25,7 +25,7 @@ public class MemberService {
 
     @Transactional
     public CommonSuccessDto exchangePoint(TransformPointDto transformPointDto) {
-        Funding funding = fundingRepository.findMemberByFundingId(transformPointDto.fundingId());
+        Funding funding = fundingRepository.findMemberById(transformPointDto.fundingId());
         if (funding == null) {
             throw new CommonException(ErrorCode.NOT_FOUND_FUNDING);
         }

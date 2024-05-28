@@ -3,7 +3,7 @@ package kcs.funding.fundingboost.domain.model;
 import java.lang.reflect.Field;
 import kcs.funding.fundingboost.domain.entity.GiftHubItem;
 import kcs.funding.fundingboost.domain.entity.Item;
-import kcs.funding.fundingboost.domain.entity.Member;
+import kcs.funding.fundingboost.domain.entity.member.Member;
 
 public class GiftHubItemFixture {
     public static GiftHubItem quantity1(Item item, Member member) throws NoSuchFieldException, IllegalAccessException {

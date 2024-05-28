@@ -2,7 +2,7 @@ package kcs.funding.fundingboost.domain.service.utils;
 
 import static kcs.funding.fundingboost.domain.exception.ErrorCode.INVALID_POINT_LACK;
 
-import kcs.funding.fundingboost.domain.entity.Member;
+import kcs.funding.fundingboost.domain.entity.member.Member;
 import kcs.funding.fundingboost.domain.exception.CommonException;
 
 public class PayUtils {

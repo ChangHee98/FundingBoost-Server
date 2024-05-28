@@ -2,7 +2,7 @@ package kcs.funding.fundingboost.domain.repository.bookmark;
 
 import static kcs.funding.fundingboost.domain.entity.QBookmark.bookmark;
 import static kcs.funding.fundingboost.domain.entity.QItem.item;
-import static kcs.funding.fundingboost.domain.entity.QMember.member;
+import static kcs.funding.fundingboost.domain.entity.member.QMember.member;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import java.util.Optional;

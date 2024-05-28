@@ -6,15 +6,15 @@ import lombok.Builder;
 
 @Builder
 public record MyOrderPayViewDto(
-        List<DeliveryDto> deliveryListDto,
+        List<DeliveryDto> deliveryDtoList,
         int point
 ) {
 
     public static MyOrderPayViewDto fromEntity(
-            List<DeliveryDto> deliveryListDto,
+            List<DeliveryDto> deliveryDtoList,
             int point) {
         return MyOrderPayViewDto.builder()
-                .deliveryListDto(deliveryListDto)
+                .deliveryDtoList(deliveryDtoList)
                 .point(point)
                 .build();
     }

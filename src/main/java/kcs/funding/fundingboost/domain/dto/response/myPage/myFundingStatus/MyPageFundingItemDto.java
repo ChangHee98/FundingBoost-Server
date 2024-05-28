@@ -1,7 +1,7 @@
 package kcs.funding.fundingboost.domain.dto.response.myPage.myFundingStatus;
 
 import kcs.funding.fundingboost.domain.entity.Funding;
-import kcs.funding.fundingboost.domain.entity.Item;
+import kcs.funding.fundingboost.domain.entity.FundingItem;
 import lombok.Builder;
 
 @Builder
@@ -12,23 +12,23 @@ public record MyPageFundingItemDto(
         String itemImageUrl,
         String optionName,
         int itemPercent,
-        boolean finishedStatus
+        boolean finishedStatus,
+        boolean itemStatus
 ) {
     public static MyPageFundingItemDto fromEntity(
             Funding funding,
-            Item item,
-            int itemPercent,
-            boolean finishedStatus
+            FundingItem fundingItem,
+            int itemPercent
     ) {
         return MyPageFundingItemDto.builder()
                 .fundingId(funding.getFundingId())
-                .itemName(item.getItemName())
-                .itemPrice(item.getItemPrice())
-                .itemImageUrl(item.getItemImageUrl())
-                .optionName(item.getOptionName())
+                .itemName(fundingItem.getItem().getItemName())
+                .itemPrice(fundingItem.getItem().getItemPrice())
+                .itemImageUrl(fundingItem.getItem().getItemImageUrl())
+                .optionName(fundingItem.getItem().getOptionName())
                 .itemPercent(itemPercent)
-                .finishedStatus(finishedStatus)
+                .finishedStatus(fundingItem.isFinishedStatus())
+                .itemStatus(fundingItem.isItemStatus())
                 .build();
     }
-
 }

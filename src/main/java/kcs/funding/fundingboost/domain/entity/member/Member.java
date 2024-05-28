@@ -1,9 +1,11 @@
-package kcs.funding.fundingboost.domain.entity;
+package kcs.funding.fundingboost.domain.entity.member;
 
 import static jakarta.persistence.GenerationType.IDENTITY;
 
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
 import jakarta.persistence.Table;
@@ -29,6 +31,10 @@ public class Member extends BaseTimeEntity {
     @Column(name = "nick_name", length = 20)
     private String nickName;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "member_role")
+    private MemberRole memberRole;
+
     @Column(length = 100)
     private String password;
 
@@ -36,7 +42,6 @@ public class Member extends BaseTimeEntity {
     @Column(length = 50)
     private String email;
 
-    @NotNull
     @Column(name = "profile_img_url", length = 100)
     private String profileImgUrl;
 
@@ -44,33 +49,42 @@ public class Member extends BaseTimeEntity {
     @NotNull
     private int point;
 
-    private String refreshToken;
-
     @Column(length = 100)
     private String kakaoUuid;
 
-    public static Member createMember(String nickName, String email, String password, String profileImgUrl,
-                                      String refreshToken, String kakaoUuid) {
+    public static Member createSignUpMember(String nickName, String password, String email) {
         Member member = new Member();
         member.nickName = nickName;
+        member.password = password;
+        member.email = email;
+        member.point = 0;
+        member.memberRole = MemberRole.ROLE_USER;
+
+        return member;
+    }
+
+    public static Member createMember(String nickName, String email, String password, String profileImgUrl,
+                                      String kakaoUuid) {
+        Member member = new Member();
+        member.nickName = nickName;
+        member.memberRole = MemberRole.ROLE_USER;
         member.email = email;
         member.password = password;
         member.profileImgUrl = profileImgUrl;
-        member.refreshToken = refreshToken;
         member.kakaoUuid = kakaoUuid;
         return member;
     }
 
     //init(포인트 포함)
     public static Member createMemberWithPoint(String nickName, String email, String password, String profileImgUrl,
-                                               int point, String refreshToken, String kakaoUuid) {
+                                               int point, String kakaoUuid) {
         Member member = new Member();
         member.nickName = nickName;
+        member.memberRole = MemberRole.ROLE_USER;
         member.email = email;
         member.password = password;
         member.profileImgUrl = profileImgUrl;
         member.point = point;
-        member.refreshToken = refreshToken;
         member.kakaoUuid = kakaoUuid;
         return member;
     }

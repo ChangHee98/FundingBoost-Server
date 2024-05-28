@@ -23,7 +23,7 @@ import kcs.funding.fundingboost.domain.entity.Contributor;
 import kcs.funding.fundingboost.domain.entity.Funding;
 import kcs.funding.fundingboost.domain.entity.FundingItem;
 import kcs.funding.fundingboost.domain.entity.Item;
-import kcs.funding.fundingboost.domain.entity.Member;
+import kcs.funding.fundingboost.domain.entity.member.Member;
 import kcs.funding.fundingboost.domain.exception.CommonException;
 import kcs.funding.fundingboost.domain.model.FundingFixture;
 import kcs.funding.fundingboost.domain.model.FundingItemFixture;
@@ -33,6 +33,7 @@ import kcs.funding.fundingboost.domain.repository.MemberRepository;
 import kcs.funding.fundingboost.domain.repository.contributor.ContributorRepository;
 import kcs.funding.fundingboost.domain.repository.funding.FundingRepository;
 import kcs.funding.fundingboost.domain.repository.fundingItem.FundingItemRepository;
+import kcs.funding.fundingboost.domain.service.utils.FundingUtils;
 import lombok.extern.slf4j.Slf4j;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -300,9 +301,9 @@ class FundingServiceTest {
 
         // MyPageFundingDetailHistoryDto 생성
         MyPageFundingDetailHistoryDto resultMyPageFundingDetailHistoryDto1 = MyPageFundingDetailHistoryDto.fromEntity(
-                finishedFunding1, 10);
+                finishedFunding1, 10, FundingUtils.calculateFundingPercent(finishedFunding1));
         MyPageFundingDetailHistoryDto resultMyPageFundingDetailHistoryDto2 = MyPageFundingDetailHistoryDto.fromEntity(
-                finishedFunding2, 20);
+                finishedFunding2, 20, FundingUtils.calculateFundingPercent(finishedFunding2));
 
         // when
         MyFundingHistoryDto myFundingHistoryDto = fundingService.getMyFundingHistory(member.getMemberId());

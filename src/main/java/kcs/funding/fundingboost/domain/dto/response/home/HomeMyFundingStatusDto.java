@@ -8,6 +8,7 @@ import lombok.Builder;
 public record HomeMyFundingStatusDto(Long fundingId,
                                      String deadline,
                                      int totalPercent,
+                                     String tag,
                                      List<HomeMyFundingItemDto> homeMyFundingItemDtoList) {
 
     public static HomeMyFundingStatusDto fromEntity(Funding funding,
@@ -18,6 +19,7 @@ public record HomeMyFundingStatusDto(Long fundingId,
                 .fundingId(funding.getFundingId())
                 .deadline(deadline)
                 .totalPercent(totalPercent)
+                .tag(funding.getTag().getDisplayName())
                 .homeMyFundingItemDtoList(homeMyFundingItemDtoList)
                 .build();
     }

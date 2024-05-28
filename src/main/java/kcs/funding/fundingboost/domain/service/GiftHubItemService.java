@@ -14,11 +14,11 @@ import kcs.funding.fundingboost.domain.dto.request.giftHub.ItemQuantityDto;
 import kcs.funding.fundingboost.domain.dto.response.giftHub.GiftHubDto;
 import kcs.funding.fundingboost.domain.entity.GiftHubItem;
 import kcs.funding.fundingboost.domain.entity.Item;
-import kcs.funding.fundingboost.domain.entity.Member;
+import kcs.funding.fundingboost.domain.entity.member.Member;
 import kcs.funding.fundingboost.domain.exception.CommonException;
-import kcs.funding.fundingboost.domain.repository.ItemRepository;
 import kcs.funding.fundingboost.domain.repository.MemberRepository;
 import kcs.funding.fundingboost.domain.repository.giftHubItem.GiftHubItemRepository;
+import kcs.funding.fundingboost.domain.repository.item.ItemRepository;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.stereotype.Service;
@@ -48,11 +48,11 @@ public class GiftHubItemService {
     }
 
     @Transactional
-    public CommonSuccessDto addGiftHub(Long itemId, AddGiftHubDto addGiftHubDto) {
+    public CommonSuccessDto addGiftHub(Long itemId, AddGiftHubDto addGiftHubDto, Long memberId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new CommonException(NOT_FOUND_ITEM));
 
-        Member member = memberRepository.findById(addGiftHubDto.memberId())
+        Member member = memberRepository.findById(memberId)
                 .orElseThrow(() -> new CommonException(NOT_FOUND_MEMBER));
 
         GiftHubItem giftHubItem = GiftHubItem.createGiftHubItem(addGiftHubDto.quantity(), item, member);

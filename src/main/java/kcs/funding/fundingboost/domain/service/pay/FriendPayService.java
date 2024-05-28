@@ -4,12 +4,13 @@ import static kcs.funding.fundingboost.domain.exception.ErrorCode.INVALID_FUNDIN
 import static kcs.funding.fundingboost.domain.exception.ErrorCode.NOT_FOUND_FUNDING;
 import static kcs.funding.fundingboost.domain.exception.ErrorCode.NOT_FOUND_MEMBER;
 
+import kcs.funding.fundingboost.domain.aop.lock.RedisLock;
 import kcs.funding.fundingboost.domain.dto.common.CommonSuccessDto;
 import kcs.funding.fundingboost.domain.dto.request.pay.friendFundingPay.FriendPayProcessDto;
 import kcs.funding.fundingboost.domain.dto.response.pay.friendFundingPay.FriendFundingPayingDto;
 import kcs.funding.fundingboost.domain.entity.Contributor;
 import kcs.funding.fundingboost.domain.entity.Funding;
-import kcs.funding.fundingboost.domain.entity.Member;
+import kcs.funding.fundingboost.domain.entity.member.Member;
 import kcs.funding.fundingboost.domain.exception.CommonException;
 import kcs.funding.fundingboost.domain.repository.MemberRepository;
 import kcs.funding.fundingboost.domain.repository.contributor.ContributorRepository;
@@ -36,6 +37,7 @@ public class FriendPayService {
         return FriendFundingPayingDto.fromEntity(friendFunding, member.getPoint());
     }
 
+    @RedisLock(key = "lock")
     @Transactional
     public CommonSuccessDto fund(Long memberId, Long fundingId,
                                  FriendPayProcessDto friendPayProcessDto) {
