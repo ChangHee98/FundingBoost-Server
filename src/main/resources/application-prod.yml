@@ -4,15 +4,16 @@ server:
       charset: utf-8
       force: true
   port: 8080
+  forward-headers-strategy: framework
 spring:
   datasource:
-    url: ${DATABASE_URL}?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
+    url: jdbc:mariadb://mariadb/fundingboost?allowPublicKeyRetrieval=true&useSSL=false&serverTimezone=Asia/Seoul&characterEncoding=UTF-8
     username: root
     password: root
-    driver-class-name: com.mysql.cj.jdbc.Driver
+    driver-class-name: org.mariadb.jdbc.Driver
   jpa:
-    database-platform: org.hibernate.dialect.MySQLDialect
     hibernate:
+      database-platform: org.hibernate.dialect.MariaDB103Dialect
       ddl-auto: validate
     show-sql: true
     properties:
@@ -24,9 +25,5 @@ spring:
 
 logging:
   level:
-    '[kcs.funding.fundingboost]': INFO
+#    '[kcs.funding.fundingboost]': INFO
     '[org.hibernate.type]': TRACE
-
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html

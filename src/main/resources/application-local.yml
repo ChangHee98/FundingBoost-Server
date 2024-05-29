@@ -1,72 +1,72 @@
-spring:
-  profiles:
-    include: oauth
-  jpa:
-    hibernate:
-      ddl-auto: create
-    properties:
-      hibernate:
-        format_sql: true
-        use_sql_comments: true
-        default_batch_fetch_size: 3
-    database-platform: org.hibernate.dialect.H2Dialect
-  #  profiles:
-  #    active: prod
-  #    include: swagger, redis
+# spring:
+#   profiles:
+#     include: oauth
+#   jpa:
+#     hibernate:
+#       ddl-auto: create
+#     properties:
+#       hibernate:
+#         format_sql: true
+#         use_sql_comments: true
+#         default_batch_fetch_size: 3
+#     database-platform: org.hibernate.dialect.H2Dialect
+#   #  profiles:
+#   #    active: prod
+#   #    include: swagger, redis
 
-  data:
-    web:
-      pageable:
-        default-page-size: 10
-    #        one-indexed-parameters: true
-    redis:
-      refresh-token:
-        host: localhost
-        port: 6379
-      lock:
-        host: localhost
-        port: 6380
-
-
-  h2:
-    console:
-      enabled: true
-      path: /h2-console
-  datasource:
-    url: jdbc:h2:mem:testdb
-    username: sa
-    password:
-    driver-class-name: org.h2.Driver
-
-  security:
-    oauth2:
-      client:
-        registration:
-          kakao:
-            client-id: ${KAKAO_CLIENT_ID}
-            client-secret: ${KAKAO_CLIENT_SECRET}
-            redirect-uri: ${KAKAO_REDIRECT_URI}
-            authorization-grant-type: ${KAKAO_AUTHORIZATION_GRANT_TYPE}
-            client-authentication-method: ${KAKAO_CLIENT_AUTHENTICATION_METHOD}
-            client-name: ${CLIENT_NAME}
-            scope:
-              - profile_nickname
-              - profile_image
-              - account_email
-              - friends
-              - talk_message
-        provider:
-          kakao:
-            authorization-uri: https://kauth.kakao.com/oauth/authorize
-            token-uri: https://kauth.kakao.com/oauth/token
-            user-info-uri: https://kapi.kakao.com/v2/user/me
-            user-name-attribute: id
+#   data:
+#     web:
+#       pageable:
+#         default-page-size: 10
+#     #        one-indexed-parameters: true
+#     redis:
+#       refresh-token:
+#         host: localhost
+#         port: 6379
+#       lock:
+#         host: localhost
+#         port: 6380
 
 
-springdoc:
-  swagger-ui:
-    path: /swagger-ui.html
+#   h2:
+#     console:
+#       enabled: true
+#       path: /h2-console
+#   datasource:
+#     url: jdbc:h2:mem:testdb
+#     username: sa
+#     password:
+#     driver-class-name: org.h2.Driver
 
-#jwt:
-#  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
-#  token-validity-in-seconds: 864000
+#   security:
+#     oauth2:
+#       client:
+#         registration:
+#           kakao:
+#             client-id: ${KAKAO_CLIENT_ID}
+#             client-secret: ${KAKAO_CLIENT_SECRET}
+#             redirect-uri: ${KAKAO_REDIRECT_URI}
+#             authorization-grant-type: ${KAKAO_AUTHORIZATION_GRANT_TYPE}
+#             client-authentication-method: ${KAKAO_CLIENT_AUTHENTICATION_METHOD}
+#             client-name: ${CLIENT_NAME}
+#             scope:
+#               - profile_nickname
+#               - profile_image
+#               - account_email
+#               - friends
+#               - talk_message
+#         provider:
+#           kakao:
+#             authorization-uri: https://kauth.kakao.com/oauth/authorize
+#             token-uri: https://kauth.kakao.com/oauth/token
+#             user-info-uri: https://kapi.kakao.com/v2/user/me
+#             user-name-attribute: id
+
+
+# springdoc:
+#   swagger-ui:
+#     path: /swagger-ui.html
+
+# #jwt:
+# #  secret: c2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQtc2lsdmVybmluZS10ZWNoLXNwcmluZy1ib290LWp3dC10dXRvcmlhbC1zZWNyZXQK
+# #  token-validity-in-seconds: 864000

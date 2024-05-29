@@ -1,8 +1,9 @@
 spring:
   data:
-    refresh-token:
-      host: localhost
-      port: 6379
-    lock:
-      host: localhost
-      port: 6380
+    redis:
+      refresh-token:
+        host: redis
+        port: 6379
+      lock:
+        host: redis
+        port: 6380

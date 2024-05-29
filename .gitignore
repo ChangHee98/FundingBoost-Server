@@ -38,3 +38,4 @@ bin/
 ### oauth config ###
 src/main/resources/application-oauth.yml
 src/test/resources/application-oauth.yml
+src/main/resources/application.properties
