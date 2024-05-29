@@ -134,7 +134,7 @@ public class FundingControllerTest {
         given(fundingService.getMainView(member1.getMemberId(), pageable, 11L)).willReturn(homeViewDto);
 
         mockMvc.perform(get("/api/v1/home")
-                        .param("memberId", "1")
+//                        .param("memberId", "1")
                         .param("lastItemId", "11")// Adjust parameters as needed
                         .contentType(APPLICATION_JSON)
                         .with(csrf()))
