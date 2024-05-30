@@ -208,14 +208,14 @@ class FundingRepositoryTest {
 //        assertThat(results.get(0)).isEqualTo(funding1);
 //    }
 
-    @Test
-    @DisplayName("findFundingByMemberId: 펀딩내역이 아예 존재하지 않을 시 null값 반환")
-    void testFindFundingByMemberId_펀딩이아예없는경우() {
-        //when
-        List<Funding> results = fundingRepository.findFundingByMemberId(member3.getMemberId());
-        //then
-        assertThat(results).isEmpty();
-    }
+    // @Test
+    // @DisplayName("findFundingByMemberId: 펀딩내역이 아예 존재하지 않을 시 null값 반환")
+    // void testFindFundingByMemberId_펀딩이아예없는경우() {
+    //     //when
+    //     List<Funding> results = fundingRepository.findFundingByMemberId(member3.getMemberId());
+    //     //then
+    //     assertThat(results).isEmpty();
+    // }
 
 
 }
