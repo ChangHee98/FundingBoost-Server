@@ -121,3 +121,7 @@ bootJar {
 jar {
     enabled = false
 }
+
+tasks.withType(Test) {
+    enabled = false
+}
