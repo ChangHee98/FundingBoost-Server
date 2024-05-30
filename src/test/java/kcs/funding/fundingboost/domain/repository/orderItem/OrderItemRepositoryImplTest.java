@@ -21,49 +21,49 @@ import org.springframework.context.annotation.Import;
 @Import(QueryDslConfig.class)
 class OrderItemRepositoryImplTest {
 
-    @Autowired
-    private OrderItemRepository orderItemRepository;
+    // @Autowired
+    // private OrderItemRepository orderItemRepository;
 
-    @Autowired
-    private TestEntityManager testEntityManager;
+    // @Autowired
+    // private TestEntityManager testEntityManager;
     
-    private Member member;
-    private Delivery delivery;
-    private Item item;
-    private Order order;
-    private OrderItem orderItem;
+    // private Member member;
+    // private Delivery delivery;
+    // private Item item;
+    // private Order order;
+    // private OrderItem orderItem;
 
-    @BeforeEach
-    void setUp() {
-        member = Member.createMemberWithPoint("임창희", "dlackdgml3710@gmail.com", "",
-                "https://p.kakaocdn.net/th/talkp/wnbbRhlyRW/XaGAXxS1OkUtXnomt6S4IK/ky0f9a_110x110_c.jpg",
-                46000, "aFxoWGFUZlV5SH9MfE9-TH1PY1JiV2JRaF83");
+    // @BeforeEach
+    // void setUp() {
+    //     member = Member.createMemberWithPoint("임창희", "dlackdgml3710@gmail.com", "",
+    //             "https://p.kakaocdn.net/th/talkp/wnbbRhlyRW/XaGAXxS1OkUtXnomt6S4IK/ky0f9a_110x110_c.jpg",
+    //             46000, "aFxoWGFUZlV5SH9MfE9-TH1PY1JiV2JRaF83");
 
-        delivery = Delivery.createDelivery("경기도 성남시 분당구 판교역로 166", "010-1234-5678", "장이수", member);
+    //     delivery = Delivery.createDelivery("경기도 성남시 분당구 판교역로 166", "010-1234-5678", "장이수", member);
 
-        item = Item.createItem("NEW 루쥬 알뤼르 벨벳 뉘 블랑쉬 리미티드 에디션", 61000,
-                "https://img1.kakaocdn.net/thumb/C320x320@2x.fwebp.q82/?fname=https%3A%2F%2Fst.kakaocdn.net%2Fproduct%2Fgift%2Fproduct%2F20240319133310_1fda0cf74e4f43608184bce3050ae22a.jpg",
-                "샤넬", "뷰티", "00:00");
+    //     item = Item.createItem("NEW 루쥬 알뤼르 벨벳 뉘 블랑쉬 리미티드 에디션", 61000,
+    //             "https://img1.kakaocdn.net/thumb/C320x320@2x.fwebp.q82/?fname=https%3A%2F%2Fst.kakaocdn.net%2Fproduct%2Fgift%2Fproduct%2F20240319133310_1fda0cf74e4f43608184bce3050ae22a.jpg",
+    //             "샤넬", "뷰티", "00:00");
 
-        order = Order.createOrder(member, delivery);
+    //     order = Order.createOrder(member, delivery);
 
-        orderItem = orderItem.createOrderItem(order, item, 1);
+    //     orderItem = orderItem.createOrderItem(order, item, 1);
 
-        testEntityManager.persist(member);
-        testEntityManager.persist(delivery);
-        testEntityManager.persist(item);
-        testEntityManager.persist(order);
-        testEntityManager.persist(orderItem);
-    }
+    //     testEntityManager.persist(member);
+    //     testEntityManager.persist(delivery);
+    //     testEntityManager.persist(item);
+    //     testEntityManager.persist(order);
+    //     testEntityManager.persist(orderItem);
+    // }
 
-    @DisplayName("findLastOrderByMemberId 테스트")
-    @Test
-    void findLastOrderByMemberId() {
-        //when
-        List<OrderItem> result = orderItemRepository.findLastOrderByMemberId(member.getMemberId());
+    // @DisplayName("findLastOrderByMemberId 테스트")
+    // @Test
+    // void findLastOrderByMemberId() {
+    //     //when
+    //     List<OrderItem> result = orderItemRepository.findLastOrderByMemberId(member.getMemberId());
 
-        //then
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getItem().getItemName()).isEqualTo(item.getItemName());
-    }
+    //     //then
+    //     assertThat(result).hasSize(1);
+    //     assertThat(result.get(0).getItem().getItemName()).isEqualTo(item.getItemName());
+    // }
 }

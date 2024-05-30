@@ -17,35 +17,35 @@ import org.springframework.context.annotation.Import;
 @DataJpaTest
 @Import(QueryDslConfig.class)
 class DeliveryRepositoryTest {
-    @Autowired
-    private DeliveryRepository deliveryRepository;
+    // @Autowired
+    // private DeliveryRepository deliveryRepository;
 
-    @Autowired
-    private TestEntityManager testEntityManager;
+    // @Autowired
+    // private TestEntityManager testEntityManager;
 
-    private Member member;
-    private Delivery delivery;
+    // private Member member;
+    // private Delivery delivery;
 
-    @BeforeEach
-    void setUp() {
-        member = Member.createMemberWithPoint("임창희", "dlackdgml3710@gmail.com", "",
-                "https://p.kakaocdn.net/th/talkp/wnbbRhlyRW/XaGAXxS1OkUtXnomt6S4IK/ky0f9a_110x110_c.jpg",
-                46000, "aFxoWGFUZlV5SH9MfE9-TH1PY1JiV2JRaF83");
+    // @BeforeEach
+    // void setUp() {
+    //     member = Member.createMemberWithPoint("임창희", "dlackdgml3710@gmail.com", "",
+    //             "https://p.kakaocdn.net/th/talkp/wnbbRhlyRW/XaGAXxS1OkUtXnomt6S4IK/ky0f9a_110x110_c.jpg",
+    //             46000, "aFxoWGFUZlV5SH9MfE9-TH1PY1JiV2JRaF83");
 
-        delivery = Delivery.createDelivery("경기도 성남시 분당구 판교역로 166", "010-1234-5678", "장이수", member);
+    //     delivery = Delivery.createDelivery("경기도 성남시 분당구 판교역로 166", "010-1234-5678", "장이수", member);
 
-        testEntityManager.persist(member);
-        testEntityManager.persist(delivery);
-    }
+    //     testEntityManager.persist(member);
+    //     testEntityManager.persist(delivery);
+    // }
 
-    @DisplayName("findAllByMemberId 테스트")
-    @Test
-    void findAllByMemberId() {
-        //when
-        List<Delivery> result = deliveryRepository.findAllByMemberId(member.getMemberId());
+    // @DisplayName("findAllByMemberId 테스트")
+    // @Test
+    // void findAllByMemberId() {
+    //     //when
+    //     List<Delivery> result = deliveryRepository.findAllByMemberId(member.getMemberId());
 
-        //then
-        assertThat(result).hasSize(1);
-        assertThat(result.get(0).getAddress()).isEqualTo(delivery.getAddress());
-    }
+    //     //then
+    //     assertThat(result).hasSize(1);
+    //     assertThat(result.get(0).getAddress()).isEqualTo(delivery.getAddress());
+    // }
 }

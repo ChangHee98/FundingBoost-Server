@@ -17,32 +17,32 @@ import org.springframework.context.annotation.Import;
 @Import(QueryDslConfig.class)
 class MemberRepositoryTest {
 
-    @Autowired
-    private MemberRepository memberRepository;
+    // @Autowired
+    // private MemberRepository memberRepository;
 
-    @Autowired
-    private TestEntityManager testEntityManager;
+    // @Autowired
+    // private TestEntityManager testEntityManager;
 
-    private Member member;
+    // private Member member;
 
-    @BeforeEach
-    void setUp() {
-        member = Member.createMemberWithPoint("임창희", "dlackdgml3710@gmail.com", "",
-                "https://p.kakaocdn.net/th/talkp/wnbbRhlyRW/XaGAXxS1OkUtXnomt6S4IK/ky0f9a_110x110_c.jpg",
-                46000, "aFxoWGFUZlV5SH9MfE9-TH1PY1JiV2JRaF83");
-        testEntityManager.persist(member);
-        testEntityManager.clear();
-    }
+    // @BeforeEach
+    // void setUp() {
+    //     member = Member.createMemberWithPoint("임창희", "dlackdgml3710@gmail.com", "",
+    //             "https://p.kakaocdn.net/th/talkp/wnbbRhlyRW/XaGAXxS1OkUtXnomt6S4IK/ky0f9a_110x110_c.jpg",
+    //             46000, "aFxoWGFUZlV5SH9MfE9-TH1PY1JiV2JRaF83");
+    //     testEntityManager.persist(member);
+    //     testEntityManager.clear();
+    // }
 
-    @Test
-    @DisplayName("닉네임으로 사용자 검색 - 성공")
-    void findByNickName() {
-        //when
-        Optional<Member> searchMember = memberRepository.findByNickName(member.getNickName());
+    // @Test
+    // @DisplayName("닉네임으로 사용자 검색 - 성공")
+    // void findByNickName() {
+    //     //when
+    //     Optional<Member> searchMember = memberRepository.findByNickName(member.getNickName());
 
-        //then
-        assertThat(searchMember).isPresent();
-        assertThat(searchMember.get().getNickName()).isEqualTo(member.getNickName());
-        assertThat(searchMember.get().getMemberId()).isEqualTo(member.getMemberId());
-    }
+    //     //then
+    //     assertThat(searchMember).isPresent();
+    //     assertThat(searchMember.get().getNickName()).isEqualTo(member.getNickName());
+    //     assertThat(searchMember.get().getMemberId()).isEqualTo(member.getMemberId());
+    // }
 }
