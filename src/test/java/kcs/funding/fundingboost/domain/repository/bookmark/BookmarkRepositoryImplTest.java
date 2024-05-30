@@ -1,7 +1,6 @@
 package kcs.funding.fundingboost.domain.repository.bookmark;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 import java.util.Optional;
 import kcs.funding.fundingboost.domain.config.QueryDslConfig;
@@ -20,7 +19,7 @@ import org.springframework.context.annotation.Import;
 @DataJpaTest
 @Import(QueryDslConfig.class)
 @Slf4j
-@AutoConfigureTestDatabase(replace = NONE)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class BookmarkRepositoryImplTest {
 
     @Autowired

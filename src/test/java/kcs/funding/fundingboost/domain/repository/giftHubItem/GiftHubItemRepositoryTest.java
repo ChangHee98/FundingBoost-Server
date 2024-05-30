@@ -2,7 +2,6 @@ package kcs.funding.fundingboost.domain.repository.giftHubItem;
 
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 import kcs.funding.fundingboost.domain.config.QueryDslConfig;
 import kcs.funding.fundingboost.domain.entity.GiftHubItem;
@@ -19,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest
 @Import(QueryDslConfig.class)
-@AutoConfigureTestDatabase(replace = NONE)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class GiftHubItemRepositoryTest {
 
     @Autowired

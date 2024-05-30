@@ -3,7 +3,6 @@ package kcs.funding.fundingboost.domain.repository.funding;
 import static kcs.funding.fundingboost.domain.entity.Tag.BIRTHDAY;
 import static kcs.funding.fundingboost.domain.entity.Tag.GRADUATE;
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -24,7 +23,7 @@ import org.springframework.context.annotation.Import;
 @DataJpaTest
 @Import({QueryDslConfig.class})
 @Slf4j
-@AutoConfigureTestDatabase(replace = NONE)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class FundingRepositoryTest {
 
     @Autowired

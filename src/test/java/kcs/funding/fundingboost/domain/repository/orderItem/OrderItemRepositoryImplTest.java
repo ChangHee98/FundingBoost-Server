@@ -1,7 +1,6 @@
 package kcs.funding.fundingboost.domain.repository.orderItem;
 
 import static org.assertj.core.api.Assertions.assertThat;
-import static org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase.Replace.NONE;
 
 import java.util.List;
 import kcs.funding.fundingboost.domain.config.QueryDslConfig;
@@ -20,7 +19,7 @@ import org.springframework.context.annotation.Import;
 
 @DataJpaTest
 @Import(QueryDslConfig.class)
-@AutoConfigureTestDatabase(replace = NONE)
+@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class OrderItemRepositoryImplTest {
 
     @Autowired
