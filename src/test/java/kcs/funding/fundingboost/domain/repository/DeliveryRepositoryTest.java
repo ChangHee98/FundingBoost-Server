@@ -16,6 +16,7 @@ import org.springframework.context.annotation.Import;
 
 @DataJpaTest
 @Import(QueryDslConfig.class)
+@AutoConfigureTestDatabase(replace = NONE)
 class DeliveryRepositoryTest {
     @Autowired
     private DeliveryRepository deliveryRepository;

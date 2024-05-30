@@ -20,6 +20,7 @@ import org.springframework.context.annotation.Import;
 @DataJpaTest
 @Import(QueryDslConfig.class)
 @Slf4j
+@AutoConfigureTestDatabase(replace = NONE)
 class BookmarkRepositoryTest {
     @Autowired
     private BookmarkRepository bookmarkRepository;

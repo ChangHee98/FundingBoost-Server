@@ -18,7 +18,7 @@ import org.springframework.transaction.annotation.Transactional;
 
 @DataJpaTest
 @Import(QueryDslConfig.class)
-@Transactional
+@AutoConfigureTestDatabase(replace = NONE)
 class GiftHubItemRepositoryTest {
 
     @Autowired
