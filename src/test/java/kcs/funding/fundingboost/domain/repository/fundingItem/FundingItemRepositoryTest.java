@@ -23,7 +23,6 @@ import org.springframework.context.annotation.Import;
 @Slf4j
 @DataJpaTest
 @Import(QueryDslConfig.class)
-@AutoConfigureTestDatabase(replace = AutoConfigureTestDatabase.Replace.NONE)
 class FundingItemRepositoryTest {
 
     @Autowired
